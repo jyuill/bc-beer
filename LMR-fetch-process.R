@@ -239,16 +239,23 @@ con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg'
 #dbGetQuery(con, "SELECT * FROM tblLDB_beer_sales;")
 ## > insert ####
 for(i in 1:nrow(tbl_df_t)){
-  dbExecute(con, glue("INSERT INTO tblLDB_beer_sales (
-  category,
-  subcategory,
-  period,
-  netsales,
-  qtr,
-  yr,
-  end_dt,
-  end_qtr_dt
-)
+  ## test for existence of row - insert if not already exist
+  if(nrow(dbGetQuery(con, glue("SELECT * FROM tblLDB_beer_sales 
+                       WHERE category='{tbl_df_t$category[i]}' AND
+                       subcategory='{tbl_df_t$subcategory[i]}' AND
+                       qtr='{tbl_df_t$qtr[i]}' AND
+                       yr='{tbl_df_t$yr[i]}';")))==0) {
+    ## insert query
+    dbExecute(con, glue("INSERT INTO tblLDB_beer_sales (
+            category,
+            subcategory,
+            period,
+            netsales,
+            qtr,
+            yr,
+            end_dt,
+            end_qtr_dt
+          )
           VALUES('{tbl_df_t$category[i]}',
           '{tbl_df_t$subcategory[i]}',
           '{tbl_df_t$period[i]}',
@@ -258,7 +265,8 @@ for(i in 1:nrow(tbl_df_t)){
           '{tbl_df_t$end_dt[i]}',
           '{tbl_df_t$end_qtr_dt[i]}'
           );"))
-}
+  } ## end test IF
+} ## end insert loop
 
 ## always disconnect when done
 dbDisconnect(con)
