@@ -1,0 +1,56 @@
+category,subcategory,period,netsales,qtr,fyr,cyr,end_dt,end_qtr_dt
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2021 Q1,136222660,Q1,2021,2020,06-30,2020-06-30
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2021 Q2,136117705,Q2,2021,2020,09-30,2020-09-30
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2021 Q3,104815457,Q3,2021,2020,12-31,2020-12-31
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2021 Q4,99969933,Q4,2021,2021,03-01,2021-03-01
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2022 Q1,129431570,Q1,2022,2021,06-30,2021-06-30
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2021 Q1,33147382,Q1,2021,2020,06-30,2020-06-30
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2021 Q2,38492046,Q2,2021,2020,09-30,2020-09-30
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2021 Q3,30968540,Q3,2021,2020,12-31,2020-12-31
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2021 Q4,29809626,Q4,2021,2021,03-01,2021-03-01
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2022 Q1,40189842,Q1,2022,2021,06-30,2021-06-30
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2021 Q1,49341729,Q1,2021,2020,06-30,2020-06-30
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2021 Q2,52904002,Q2,2021,2020,09-30,2020-09-30
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2021 Q3,44005674,Q3,2021,2020,12-31,2020-12-31
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2021 Q4,38014952,Q4,2021,2021,03-01,2021-03-01
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2022 Q1,51664127,Q1,2022,2021,06-30,2021-06-30
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2021 Q1,27067651,Q1,2021,2020,06-30,2020-06-30
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2021 Q2,26556592,Q2,2021,2020,09-30,2020-09-30
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2021 Q3,25558598,Q3,2021,2020,12-31,2020-12-31
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2021 Q4,28205203,Q4,2021,2021,03-01,2021-03-01
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2022 Q1,47004155,Q1,2022,2021,06-30,2021-06-30
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2021 Q1,93129,Q1,2021,2020,06-30,2020-06-30
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2021 Q2,150470,Q2,2021,2020,09-30,2020-09-30
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2021 Q3,129763,Q3,2021,2020,12-31,2020-12-31
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2021 Q4,150630,Q4,2021,2021,03-01,2021-03-01
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2022 Q1,192047,Q1,2022,2021,06-30,2021-06-30
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2021 Q1,888718,Q1,2021,2020,06-30,2020-06-30
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2021 Q2,1163330,Q2,2021,2020,09-30,2020-09-30
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2021 Q3,828606,Q3,2021,2020,12-31,2020-12-31
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2021 Q4,830137,Q4,2021,2021,03-01,2021-03-01
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2022 Q1,1323148,Q1,2022,2021,06-30,2021-06-30
+Import Beer,Asia And South Pacific Beer,FY 2021 Q1,1060200,Q1,2021,2020,06-30,2020-06-30
+Import Beer,Asia And South Pacific Beer,FY 2021 Q2,1355234,Q2,2021,2020,09-30,2020-09-30
+Import Beer,Asia And South Pacific Beer,FY 2021 Q3,1141080,Q3,2021,2020,12-31,2020-12-31
+Import Beer,Asia And South Pacific Beer,FY 2021 Q4,1122806,Q4,2021,2021,03-01,2021-03-01
+Import Beer,Asia And South Pacific Beer,FY 2022 Q1,1242337,Q1,2022,2021,06-30,2021-06-30
+Import Beer,Europe Beer,FY 2021 Q1,25282565,Q1,2021,2020,06-30,2020-06-30
+Import Beer,Europe Beer,FY 2021 Q2,27520449,Q2,2021,2020,09-30,2020-09-30
+Import Beer,Europe Beer,FY 2021 Q3,19165293,Q3,2021,2020,12-31,2020-12-31
+Import Beer,Europe Beer,FY 2021 Q4,17344171,Q4,2021,2021,03-01,2021-03-01
+Import Beer,Europe Beer,FY 2022 Q1,21468330,Q1,2022,2021,06-30,2021-06-30
+Import Beer,Mexico And Caribbean Beer,FY 2021 Q1,15495375,Q1,2021,2020,06-30,2020-06-30
+Import Beer,Mexico And Caribbean Beer,FY 2021 Q2,18746416,Q2,2021,2020,09-30,2020-09-30
+Import Beer,Mexico And Caribbean Beer,FY 2021 Q3,6182590,Q3,2021,2020,12-31,2020-12-31
+Import Beer,Mexico And Caribbean Beer,FY 2021 Q4,1808334,Q4,2021,2021,03-01,2021-03-01
+Import Beer,Mexico And Caribbean Beer,FY 2022 Q1,3688402,Q1,2022,2021,06-30,2021-06-30
+Import Beer,Other Country Beer,FY 2021 Q1,54429,Q1,2021,2020,06-30,2020-06-30
+Import Beer,Other Country Beer,FY 2021 Q2,61143,Q2,2021,2020,09-30,2020-09-30
+Import Beer,Other Country Beer,FY 2021 Q3,80740,Q3,2021,2020,12-31,2020-12-31
+Import Beer,Other Country Beer,FY 2021 Q4,122427,Q4,2021,2021,03-01,2021-03-01
+Import Beer,Other Country Beer,FY 2022 Q1,117914,Q1,2022,2021,06-30,2021-06-30
+Import Beer,USA Beer,FY 2021 Q1,2361193,Q1,2021,2020,06-30,2020-06-30
+Import Beer,USA Beer,FY 2021 Q2,2033265,Q2,2021,2020,09-30,2020-09-30
+Import Beer,USA Beer,FY 2021 Q3,1561354,Q3,2021,2020,12-31,2020-12-31
+Import Beer,USA Beer,FY 2021 Q4,1610268,Q4,2021,2021,03-01,2021-03-01
+Import Beer,USA Beer,FY 2022 Q1,2078638,Q1,2022,2021,06-30,2021-06-30

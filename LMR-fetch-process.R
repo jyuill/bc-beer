@@ -17,10 +17,21 @@ library(readr) ## for easy conversion of $ characters to numeric
 ## everything else is manual
 ## > SET SPECS ####
 ## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
+## find link at: https://www.bcldb.com/publications/liquor-market-review 
 ## LINK
-furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F21_22_Q4_March_2022.pdf"
+#furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F21_22_Q4_March_2022.pdf"
+#furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F21_22_Q1_June_2021.pdf"
+furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F19_20_Q4_March_2020.pdf"
+furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F18_19_Q4_March_2019.pdf"
+furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_Q4_March_2018.pdf"
+furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F16_17_Q4_March_2017.pdf"
 ## FILENAME for saving
-fname <- "LMR_2022_03.pdf"
+#fname <- "LMR_2022_03.pdf"
+#fname <- "LMR_2021_06.pdf"
+fname <- "LMR_2020_03.pdf"
+fname <- "LMR_2019_03.pdf"
+fname <- "LMR_2018_03.pdf"
+fname <- "LMR_2017_03.pdf"
 ## **END manual section ####
 
 ## > DL & SAVE ####
@@ -98,6 +109,7 @@ tbl_row <- str_replace_all(tbl_row, "\\$","x$")
 ## split into cols
 tbl_rowcol <- str_split_fixed(tbl_row, "x",8)
 tbl_rowcol_sp <- tbl_rowcol[1,-1] ## remove empty first item
+
 ## > next rows ####
 ## process several at a time
 ## next rows have one less leading header - no 'Domestic - BC Beer'
@@ -121,10 +133,12 @@ tbl_sec_all <- tbl_top
 ## - same format, same process
 ## > DATA ####
 ## check/get target rows
-tbl_sec <- tbl[6:8]
+# tbl_sec <- tbl[6:8] ## pre Mar 2018
+tbl_sec <- tbl[7:9] ## starting Mar 2018
 ## > first row ####
 ## remove leading whitespace
 tbl_row <- str_squish(tbl_sec[1])
+tbl_row <- str_squish(tbl_sec)
 ## add markers for splitting
 tbl_row <- str_replace_all(tbl_row, "D", "xD")
 tbl_row <- str_replace_all(tbl_row, "\\$","x$")
@@ -151,7 +165,8 @@ tbl_sec_all <- rbind(tbl_sec_all, tbl_secs)
 ## 5. ADD NEXT SECTION ####
 ## > DATA ####
 ## check/get target rows
-tbl_sec <- tbl[10:14]
+#tbl_sec <- tbl[10:14] ## pre Mar 2018
+tbl_sec <- tbl[12:16] ## starting Mar 2018
 ## > first row ####
 ## remove leading whitespace
 tbl_row <- str_squish(tbl_sec[1])
@@ -178,6 +193,8 @@ tbl_secs <- rbind(tbl_rowcol_sp, mult_rowcol)
 tbl_secs[2:nrow(tbl_secs),1] <- tbl_secs[1,1]
 ## join with top section - before data frame
 tbl_sec_all <- rbind(tbl_sec_all, tbl_secs)
+## remove spaces at end of entries
+tbl_sec_all <- apply(tbl_sec_all, 1:2, function(x) str_squish(x))
 
 ## 6. CONVERT TO DF ####
 ## at end with entire table
@@ -216,13 +233,14 @@ tbl_df_t <- tbl_df %>% pivot_longer(cols=c(3:7), names_to='period', values_to='n
 ## add cols for period info
 tbl_df_t <- tbl_df_t %>% mutate(
   qtr=substr(period, start=9, stop=10),
-  yr=substr(period, start=4, stop=7)
+  fyr=as.numeric(substr(period, start=4, stop=7)),
+  cyr=ifelse(qtr=='Q4',fyr, fyr-1)
 )
 ## add end date (month - day) for quarters
 tbl_df_t <- full_join(tbl_df_t, ldb_fy, by='qtr')
 ## add end date yr for time series
 tbl_df_t <- tbl_df_t %>% mutate(
-  end_qtr_dt=date(paste(yr,end_dt, sep="-"))
+  end_qtr_dt=date(paste(cyr,end_dt, sep="-"))
 )
 
 ## 8. SAVE ####
@@ -244,7 +262,7 @@ for(i in 1:nrow(tbl_df_t)){
                        WHERE category='{tbl_df_t$category[i]}' AND
                        subcategory='{tbl_df_t$subcategory[i]}' AND
                        qtr='{tbl_df_t$qtr[i]}' AND
-                       yr='{tbl_df_t$yr[i]}';")))==0) {
+                       fyr='{tbl_df_t$fyr[i]}';")))==0) {
     ## insert query
     dbExecute(con, glue("INSERT INTO tblLDB_beer_sales (
             category,
@@ -252,7 +270,8 @@ for(i in 1:nrow(tbl_df_t)){
             period,
             netsales,
             qtr,
-            yr,
+            fyr,
+            cyr,
             end_dt,
             end_qtr_dt
           )
@@ -261,7 +280,8 @@ for(i in 1:nrow(tbl_df_t)){
           '{tbl_df_t$period[i]}',
           {tbl_df_t$netsales[i]},
           '{tbl_df_t$qtr[i]}',
-          '{tbl_df_t$yr[i]}',
+          {tbl_df_t$fyr[i]},
+          {tbl_df_t$cyr[i]},
           '{tbl_df_t$end_dt[i]}',
           '{tbl_df_t$end_qtr_dt[i]}'
           );"))

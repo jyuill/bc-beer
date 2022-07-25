@@ -1,0 +1,56 @@
+category,subcategory,period,netsales,qtr,fyr,cyr,end_dt,end_qtr_dt
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2017 Q4,117899989,Q4,2017,2017,03-01,2017-03-01
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2018 Q1,157994231,Q1,2018,2017,06-30,2017-06-30
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2018 Q2,152841189,Q2,2018,2017,09-30,2017-09-30
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2018 Q3,137883828,Q3,2018,2017,12-31,2017-12-31
+Domestic - BC Beer,Domestic - BC Commercial Beer,FY 2018 Q4,116698822,Q4,2018,2018,03-01,2018-03-01
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2017 Q4,23322538,Q4,2017,2017,03-01,2017-03-01
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2018 Q1,31389997,Q1,2018,2017,06-30,2017-06-30
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2018 Q2,33030747,Q2,2018,2017,09-30,2017-09-30
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2018 Q3,29421055,Q3,2018,2017,12-31,2017-12-31
+Domestic - BC Beer,Domestic - BC Micro Brew Beer,FY 2018 Q4,28989529,Q4,2018,2018,03-01,2018-03-01
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2017 Q4,28950620,Q4,2017,2017,03-01,2017-03-01
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2018 Q1,40564531,Q1,2018,2017,06-30,2017-06-30
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2018 Q2,41528503,Q2,2018,2017,09-30,2017-09-30
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2018 Q3,36908781,Q3,2018,2017,12-31,2017-12-31
+Domestic - BC Beer,Domestic - BC Regional Beer,FY 2018 Q4,31136044,Q4,2018,2018,03-01,2018-03-01
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2017 Q4,9485356,Q4,2017,2017,03-01,2017-03-01
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2018 Q1,18311368,Q1,2018,2017,06-30,2017-06-30
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2018 Q2,17922271,Q2,2018,2017,09-30,2017-09-30
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2018 Q3,11888697,Q3,2018,2017,12-31,2017-12-31
+Domestic - Other Province Beer,Domestic - Other Province Commercial Beer,FY 2018 Q4,13052262,Q4,2018,2018,03-01,2018-03-01
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2017 Q4,198394,Q4,2017,2017,03-01,2017-03-01
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2018 Q1,309283,Q1,2018,2017,06-30,2017-06-30
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2018 Q2,323903,Q2,2018,2017,09-30,2017-09-30
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2018 Q3,274542,Q3,2018,2017,12-31,2017-12-31
+Domestic - Other Province Beer,Domestic - Other Province Micro Brew Beer,FY 2018 Q4,267850,Q4,2018,2018,03-01,2018-03-01
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2017 Q4,2016810,Q4,2017,2017,03-01,2017-03-01
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2018 Q1,2523972,Q1,2018,2017,06-30,2017-06-30
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2018 Q2,2217827,Q2,2018,2017,09-30,2017-09-30
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2018 Q3,2245752,Q3,2018,2017,12-31,2017-12-31
+Domestic - Other Province Beer,Domestic - Other Province Regional Beer,FY 2018 Q4,1873881,Q4,2018,2018,03-01,2018-03-01
+Import Beer,Asia And South Pacific Beer,FY 2017 Q4,1536704,Q4,2017,2017,03-01,2017-03-01
+Import Beer,Asia And South Pacific Beer,FY 2018 Q1,1793519,Q1,2018,2017,06-30,2017-06-30
+Import Beer,Asia And South Pacific Beer,FY 2018 Q2,1953642,Q2,2018,2017,09-30,2017-09-30
+Import Beer,Asia And South Pacific Beer,FY 2018 Q3,1738618,Q3,2018,2017,12-31,2017-12-31
+Import Beer,Asia And South Pacific Beer,FY 2018 Q4,1688499,Q4,2018,2018,03-01,2018-03-01
+Import Beer,Europe Beer,FY 2017 Q4,23253426,Q4,2017,2017,03-01,2017-03-01
+Import Beer,Europe Beer,FY 2018 Q1,29106495,Q1,2018,2017,06-30,2017-06-30
+Import Beer,Europe Beer,FY 2018 Q2,29339557,Q2,2018,2017,09-30,2017-09-30
+Import Beer,Europe Beer,FY 2018 Q3,27697976,Q3,2018,2017,12-31,2017-12-31
+Import Beer,Europe Beer,FY 2018 Q4,24648936,Q4,2018,2018,03-01,2018-03-01
+Import Beer,Mexico And Caribbean Beer,FY 2017 Q4,7183259,Q4,2017,2017,03-01,2017-03-01
+Import Beer,Mexico And Caribbean Beer,FY 2018 Q1,14359256,Q1,2018,2017,06-30,2017-06-30
+Import Beer,Mexico And Caribbean Beer,FY 2018 Q2,15843915,Q2,2018,2017,09-30,2017-09-30
+Import Beer,Mexico And Caribbean Beer,FY 2018 Q3,8395108,Q3,2018,2017,12-31,2017-12-31
+Import Beer,Mexico And Caribbean Beer,FY 2018 Q4,8080316,Q4,2018,2018,03-01,2018-03-01
+Import Beer,Other Country Beer,FY 2017 Q4,47385,Q4,2017,2017,03-01,2017-03-01
+Import Beer,Other Country Beer,FY 2018 Q1,65728,Q1,2018,2017,06-30,2017-06-30
+Import Beer,Other Country Beer,FY 2018 Q2,74183,Q2,2018,2017,09-30,2017-09-30
+Import Beer,Other Country Beer,FY 2018 Q3,98138,Q3,2018,2017,12-31,2017-12-31
+Import Beer,Other Country Beer,FY 2018 Q4,155423,Q4,2018,2018,03-01,2018-03-01
+Import Beer,USA Beer,FY 2017 Q4,9871585,Q4,2017,2017,03-01,2017-03-01
+Import Beer,USA Beer,FY 2018 Q1,14441523,Q1,2018,2017,06-30,2017-06-30
+Import Beer,USA Beer,FY 2018 Q2,15323588,Q2,2018,2017,09-30,2017-09-30
+Import Beer,USA Beer,FY 2018 Q3,11589624,Q3,2018,2017,12-31,2017-12-31
+Import Beer,USA Beer,FY 2018 Q4,7073185,Q4,2018,2018,03-01,2018-03-01
