@@ -81,7 +81,7 @@ tbl_pg <- lmr[5]
 ## split the whole page into rows at each \n (not actually visible)
 tbl_pg_rows <- strsplit(tbl_pg, "\n")
 ## > GET TABLE ####
-## isolate actual table only (remove additional text)
+## isolate actual table content only (remove additional text)
 tbl <- tbl_pg_rows[[1]][4:19]
 
 ## 2. COL HEADINGS ####
@@ -100,128 +100,60 @@ tbl_heading[1] <- "subcategory"
 tbl_heading <- cbind("category",tbl_heading)
 ## headings df ready to be used below - just need to remove first row
 
-## 3. GET FIRST SECTION ####
-## > DATA ####
-## check/get target rows
-tbl_sec <- tbl[2:4]
-## > first data row ####
-## remove leading whitespace
-tbl_row <- str_squish(tbl[2])
-## add markers for splitting
-tbl_row <- str_replace_all(tbl_row, "D", "xD")
-tbl_row <- str_replace_all(tbl_row, "\\$","x$")
-## split into cols
-tbl_rowcol <- str_split_fixed(tbl_row, "x",8)
-tbl_rowcol_sp <- tbl_rowcol[1,-1] ## remove empty first item
+## 3. REMOVE SUMMARY ROWS
+## remove Summary rows
+tbl_orig <- tbl #backup
+## cycle through and identify row numbers of summary rows
+sr <- NULL
+for(s in 1:length(tbl)){
+  if(str_detect(tbl[s], "Summary")){
+    sr = c(sr,s)
+  }
+}
+## table with no summary rows
+tbl_nsmry <- tbl[c(sr*-1)] ## remove rows identified above
+tbl <- tbl_nsmry ## reset main tbl for usage below (dangerous)
 
-## > next rows ####
-## process several at a time
-## next rows have one less leading header - no 'Domestic - BC Beer'
-tbl[3:4]
-mult_row <- str_squish(tbl[3:4])
-mult_row <- str_replace_all(mult_row, "\\$","x$")
-mult_rowcol <- str_split_fixed(mult_row,"x",6)
-## add spacer row to align with first row
-mult_rowcol <- cbind("",mult_rowcol)
-
-## > JOIN all above ####
-## join new rows to orig
-tbl_top <- rbind(tbl_heading, tbl_rowcol_sp, mult_rowcol)
-## fill down category for rows that don't have it
-tbl_top[3:4,1] <- tbl_top[2,1]
-tbl_sec_all <- tbl_top
-
-## next row is summary row - skip
-
-## 4. ADD NEXT SECTION ####
-## - same format, same process
-## > DATA ####
-## check/get target rows
-# tbl_sec <- tbl[6:8] ## pre Mar 2018
-tbl_sec <- tbl[7:9] ## starting Mar 2018
-## > first row ####
-## remove leading whitespace
-tbl_row <- str_squish(tbl_sec[1])
-tbl_row <- str_squish(tbl_sec)
-## add markers for splitting
-tbl_row <- str_replace_all(tbl_row, "D", "xD")
-tbl_row <- str_replace_all(tbl_row, "\\$","x$")
-## split into cols
-tbl_rowcol <- str_split_fixed(tbl_row, "x",8)
-tbl_rowcol_sp <- tbl_rowcol[1,-1] ## remove empty first item
-
-## > next rows ####
-## next rows have one less leading header - no 'Domestic - BC Beer'
-mult_row <- str_squish(tbl_sec[2:length(tbl_sec)])
-## don't actually need this, since 
-#mult_row <- str_replace_all(mult_row, "D","xD")
-mult_row <- str_replace_all(mult_row, "\\$","x$")
-mult_rowcol <- str_split_fixed(mult_row,"x",6)
-mult_rowcol <- cbind("",mult_rowcol)
-
-## > JOIN with prev ####
-tbl_secs <- rbind(tbl_rowcol_sp, mult_rowcol)
-tbl_secs[2:nrow(tbl_secs),1] <- tbl_secs[1,1]
-
-## join with top section - before data frame
-tbl_sec_all <- rbind(tbl_sec_all, tbl_secs)
-
-## 5. ADD NEXT SECTION ####
-## > DATA ####
-## check/get target rows
-#tbl_sec <- tbl[10:14] ## pre Mar 2018
-tbl_sec <- tbl[12:16] ## starting Mar 2018
-## > first row ####
-## remove leading whitespace
-tbl_row <- str_squish(tbl_sec[1])
-tbl_row
-## > manual markers for split ####
-## add markers for splitting -> TRICKY because not consistent like before 
-## manually customized for first 2 rows
-tbl_row <- str_replace_all(tbl_row, "Import", "xImport")
-tbl_row <- str_replace_all(tbl_row, "As","xAs")
-tbl_row <- str_replace_all(tbl_row, "\\$","x$")
-## split into cols
-tbl_rowcol <- str_split_fixed(tbl_row, "x",8)
-tbl_rowcol_sp <- tbl_rowcol[1,-1] ## remove empty first item
-## > next rows ####
-## next rows have one less leading header - no 'Domestic - BC Beer'
-mult_row <- str_squish(tbl_sec[2:length(tbl_sec)])
-## no need to split for subcategory after space removed
-#mult_row <- str_replace_all(mult_row, "^E|^M|^O|^U","xD")
-mult_row <- str_replace_all(mult_row, "\\$","xx$") ## double-x because some words have x (Mexico)
-mult_rowcol <- str_split_fixed(mult_row,"xx",6)
-mult_rowcol <- cbind("",mult_rowcol) ## need to add col at start
-## > JOIN with prev ####
-tbl_secs <- rbind(tbl_rowcol_sp, mult_rowcol)
-tbl_secs[2:nrow(tbl_secs),1] <- tbl_secs[1,1]
-## join with top section - before data frame
-tbl_sec_all <- rbind(tbl_sec_all, tbl_secs)
-## remove spaces at end of entries
-tbl_sec_all <- apply(tbl_sec_all, 1:2, function(x) str_squish(x))
-
-## 6. CONVERT TO DF ####
-## at end with entire table
-tbl_df <- data.frame(tbl_sec_all)
-## > col names 1 ####
-## set col names based on row 1
-colnames(tbl_df) <- tbl_df[1,]
-## drop first row, now that moved to col names
-tbl_df <- tbl_df[-1,]
-## > row names 1 ####
-## set row names to numbers
-rownames(tbl_df) <- seq(1:nrow(tbl_df))
-## > data clean
-## convert $ numbers in char form to numeric
-firstcol <- 3 ## first col to convert
-for(i in firstcol:ncol(tbl_df)){
-  tbl_df[,i] <- parse_number(tbl_df[,i])
+## 3. REMOVE HEADING, FIRST COL ####
+## remove heading, since captured above
+tbl <- tbl[-1] 
+tbl_bu2 <- tbl #backup
+## REMOVE FIRST COL: manual values here but should create lookup db table for category map to subcategory
+for(c in 1:length(tbl)){
+  tbl[c] <- case_when(
+    str_detect(tbl[c],"Domestic - BC Beer") ~ str_replace(tbl[c],"Domestic - BC Beer",""),
+    str_detect(tbl[c],"Domestic - Other Province Beer") ~ str_replace(tbl[c],"Domestic - Other Province Beer",""),
+    str_detect(tbl[c],"Import Beer") ~ str_replace(tbl[c],"Import Beer",""),
+    TRUE ~ tbl[c]
+  )
+  ## take out empty white space
+  tbl[c] <- str_squish(tbl[c]) 
 }
 
-## > COL NAMES 2 ####
+## 4. SPLIT TO COLS AND CLEAN ####
+## split each row at $ sign ($ gets removed)
+tbl_matrix <- str_split_fixed(tbl, "\\$", n=6)
+## remove remaining whitespace
+tbl_matrix <- apply(tbl_matrix, 2, str_squish)
+
+## 5. CONV. TO DF, SET COL NAMES, CLEAN ####
+tbl_df <- data.frame(tbl_matrix)
+## > col names from headings taken earlier####
+## set col names based on row 1
+colnames(tbl_df) <- tbl_heading[-1] ## excluding first 'category' heading
+##
+tbl_df[,2:6] <- as.integer(tbl_df[,2:6])
+## > data clean
+## convert numbers in char form to numeric
+startcol <- 2 ## first col to convert
+for(i in startcol:ncol(tbl_df)){
+  tbl_df[,i] <- parse_number(tbl_df[,i])
+}
+tbl_df_bu <- tbl_df # backup
+## > col cleanup ####
 ## clean column names for simplicity and to avoid probs later
-firstcol <- 3 ## first col to clean up
-for(i in firstcol:ncol(tbl_df)){
+startcol <- 2 ## first col to clean up
+for(i in startcol:ncol(tbl_df)){
   colnames(tbl_df)[i] <- str_replace(colnames(tbl_df)[i], 
                                                   substr(colnames(tbl_df)[i],
                                                          start=10, stop=12),"")
@@ -229,10 +161,20 @@ for(i in firstcol:ncol(tbl_df)){
 ## finish clean up col names for simplicity, avoid probs later
 colnames(tbl_df) <- str_replace_all(colnames(tbl_df),"Fiscal","FY")
 
+## 6. ADD BACK CATEGORIES ####
+## import existing for reference
+bs_data <- read_csv('input/beer_sales.csv')
+## get list of categories and subcategories
+bs_data_cat <- bs_data %>% group_by(category, subcategory) %>% summarize(count=n()) %>%
+  select(-count)
+## add categories and reorder table
+tbl_df_cat <- full_join(tbl_df, bs_data_cat, by=c('subcategory')) %>%
+  select('category','subcategory',c(2:ncol(tbl_df))) ## ncol(tbl_df) for number of cols in original tbl
+
 ## 7. TIDY structure ####
 ## > convert to long ####
 ## convert table with metrics in multiple rows to tidy format
-tbl_df_t <- tbl_df %>% pivot_longer(cols=c(3:7), names_to='period', values_to='netsales')
+tbl_df_t <- tbl_df_cat %>% pivot_longer(cols=c(3:ncol(tbl_df_cat)), names_to='period', values_to='netsales')
 ## > add cols ####
 ## add cols for period info
 tbl_df_t <- tbl_df_t %>% mutate(
@@ -248,6 +190,7 @@ tbl_df_t <- tbl_df_t %>% mutate(
 )
 
 ## 8. SAVE ####
+## save latest only - since in db
 write_csv(tbl_df_t, 'input/beer_sales.csv')
 write_csv(tbl_df_t, paste0('input/beer_sales_',
                            min(tbl_df_t$end_qtr_dt),'-',max(tbl_df_t$end_qtr_dt),'.csv'))

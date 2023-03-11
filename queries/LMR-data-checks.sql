@@ -1,15 +1,17 @@
 -- BC LDB QTRLY
+-- check all
 select * from bcbg.tblLDB_beer_sales;
+-- selected period
+select * from bcbg.tblLDB_beer_sales
+where period='FY 2022 Q4';
 
-select period, end_qtr_dt
+-- check periods covered
+select period, end_qtr_dt, count(netsales) as entries
 from bcbg.tblLDB_beer_sales
 group by period, end_qtr_dt
 order by period;
 
-select period, end_qtr_dt
-from bcbg.tblLDB_beer_sales
-where end_dt=min(end_qtr_dt);
-
+-- check earliest and most recent period
 select period, end_qtr_dt
 from bcbg.tblLDB_beer_sales
 where end_qtr_dt=(select min(end_qtr_dt) from bcbg.tblLDB_beer_sales) OR
