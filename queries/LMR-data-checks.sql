@@ -3,7 +3,7 @@
 select * from bcbg.tblLDB_beer_sales;
 -- selected period
 select * from bcbg.tblLDB_beer_sales
-where period='FY 2022 Q4';
+where period='FY 2023 Q1';
 
 -- check periods covered
 select period, end_qtr_dt, count(netsales) as entries

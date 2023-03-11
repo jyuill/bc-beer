@@ -241,7 +241,7 @@ dbDisconnect(con)
 ## Explore ####
 ## breakdown by main categories
 ## sales numbers
-tbl_df_t %>% ggplot(aes(x=period, y=net_sales, fill=category))+geom_col()+
+tbl_df_t %>% ggplot(aes(x=period, y=netsales, fill=category))+geom_col()+
   scale_y_continuous(labels=comma)
 ## % of total by category
 tbl_df_t %>% ggplot(aes(x=period, y=net_sales, fill=category))+geom_col(position='fill')+
