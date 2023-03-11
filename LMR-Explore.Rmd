@@ -1,0 +1,171 @@
+---
+title: "BC LDB Beer Sales - Explore"
+author: "`r Sys.getenv('USER')`"
+date: "`r Sys.Date()`"
+output: 
+  html_document:
+    toc: true
+    code_fold: hide
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE,
+                      message=FALSE,
+                      warning=FALSE,
+                      fig.height=3.5,
+                      fig.width=8)
+
+library(tidyverse)
+library(lubridate)
+library(here)
+library(PerformanceAnalytics)
+library(plotly)
+library(scales)
+library(gridExtra)
+library(DT)
+library(RMariaDB)
+theme_set(theme_bw())
+```
+
+## Intro 
+
+Exploring data collected so far on LDB beer sales. Data collected in LMR-fetch-process.R.
+
+## Import data from MySQL
+
+```{r}
+## get from database
+## from file in .gitignore
+source('credo.R')
+con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
+#dbGetQuery(con, "SELECT * FROM tblLDB_beer_sales;")
+## get list of tables (if needed to confirm)
+#dbGetQuery(con, "SHOW TABLES;")
+## import data into dataframe
+lmr_data <- dbGetQuery(con, "SELECT * FROM tblLDB_beer_sales;")
+str(lmr_data)
+```
+
+## Summarize
+
+```{r}
+summary(lmr_data)
+cat('Date coverage: \n')
+table(lmr_data$qtr, lmr_data$fyr)
+#table(lmr_data$category, lmr_data$subcategory)
+cat('Category > Subcategory: \n')
+lmr_data %>% group_by(category, subcategory) %>% summarize(sales=sum(netsales),
+                                                           min_date=ymd(min(end_qtr_dt)),
+                                                           max_date=ymd(max(end_qtr_dt)))
+## trying to identify metric based on excluded non-metric dimensions
+cat('Metrics used \n')
+metric <- lmr_data %>% select(-idbeersales, 
+                    -category,
+                    -subcategory,
+                    -period,
+                    -qtr,
+                    -fyr,
+                    -end_dt,
+                    -end_qtr_dt,
+                    -cyr) 
+names(metric)
+```
+
+## Trends
+
+```{r}
+ch_title <- "Total Sales by Qtr"
+lmr_trend <- lmr_data %>% group_by(end_qtr_dt) %>% summarize(sales=sum(netsales)/1000000)
+lmr_trend %>% ggplot(aes(x=end_qtr_dt, y=sales))+geom_line()+
+  scale_y_continuous(labels=comma, limits=c(0,max(lmr_trend$sales)))+
+  geom_smooth(method=lm)+
+  labs(title=ch_title, x="", y="$ sales (millions)")
+```
+
+Observation:
+
+* slight downward trend, with lots of consistent seasonality
+
+## Sales by Category
+
+```{r}
+## breakdown by main categories
+## sales numbers
+ch_title <- "Sales by Category"
+lmr_data %>% ggplot(aes(x=period, y=netsales/1000000, fill=category))+geom_col()+
+  scale_y_continuous(labels=comma, expand=expansion(mult=c(0,0.05)))+
+  labs(title=ch_title, x="", y="$ sales (millions)")+
+  theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1),
+        axis.ticks.x=element_blank())
+
+```
+
+```{r}
+## % of total by category
+ch_title <- "% Sales by Category"
+lmr_data %>% ggplot(aes(x=period, y=netsales, fill=category))+geom_col(position='fill')+
+  scale_y_continuous(labels=percent_format(), expand=expansion(mult=c(0,0)))+
+  labs(title=ch_title, x="", y="$ sales (millions)")+
+  theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1),
+        axis.ticks.x=element_blank())
+  
+## observation: domestic - bc beer is dominant and stable ~75%
+```
+
+Observation:
+
+* domestic bc beer is dominant and stable
+
+## Zoom in on Domestic - BC Beer
+
+```{r}
+## zoom in on domestic - bc beer
+ch_title <- "Domestic BC Beer Sales by Subcategory"
+lmr_data %>% filter(category=='Domestic - BC Beer') %>% 
+  ggplot(aes(x=period, y=netsales/1000000, fill=subcategory))+geom_col()+
+  scale_y_continuous(labels=comma, expand=expansion(c(0,0.05)))+
+  labs(title=ch_title, x="", y="$ sales (millions)")+
+  theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1),
+        axis.ticks.x=element_blank())
+
+## % of total by category
+ch_title <- "% Domestic BC Beer Sales by Subcategory"
+lmr_data %>% filter(category=='Domestic - BC Beer') %>% 
+  ggplot(aes(x=period, y=netsales/1000000, fill=subcategory))+geom_col(position='fill')+
+  scale_y_continuous(labels=percent_format(), expand=expansion(c(0,0)))+
+  labs(title=ch_title, x="", y="$ sales (millions)")+
+  theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1),
+        axis.ticks.x=element_blank())
+
+## observation: also stable, dominated by commercial at ~60%; micro brew ~15%
+```
+
+Observation:
+
+* dominated by commercial at ~60%, but shrinking
+* regional biggest gainer (could depend on definitions, movements from 'micro' to 'regional')
+* micro brew ~15%
+
+```{r}
+ch_total <- "% Share of Domestic BC beer subcategories"
+lmr_pc <- lmr_data %>% filter(category=='Domestic - BC Beer') %>% 
+  group_by(end_qtr_dt, period, subcategory) %>%
+  summarize(sales=sum(netsales)) %>%
+  mutate(
+    pc_total=sales/sum(sales)
+  )
+lmr_pc %>% ggplot(aes(x=end_qtr_dt, y=pc_total, color=subcategory))+geom_line()+
+  scale_y_continuous(labels=percent_format(), expand=expansion(c(0,0.05)))+
+  labs(title=ch_title, x="", y="% Domestic BC Beer Sales")
+```
+
+```{r}
+ch_total <- "% Share of Domestic BC beer subcategories"
+
+lmr_pc %>% ggplot(aes(x=period, y=pc_total, fill=subcategory))+geom_col(position=position_dodge())+
+  scale_y_continuous(labels=percent_format(), expand=expansion(c(0,0.05)))+
+  labs(title=ch_title, x="", y="% Domestic BC Beer Sales")+
+  theme(axis.text.x=element_text(angle=45, hjust=1, vjust=1),
+        axis.ticks.x=element_blank())
+```
+
