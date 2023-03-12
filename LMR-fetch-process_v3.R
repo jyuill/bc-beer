@@ -12,48 +12,16 @@ library(scales)
 library(glue)
 library(readr) ## for easy conversion of $ characters to numeric
 
-## GET DATA ####
-## **START manual section ####
-## everything else is manual
-## > SET SPECS ####
-## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
-## find link at: https://www.bcldb.com/publications/liquor-market-review 
-## LINK
-furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q3_December_2022.pdf"
-furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q2_September_2022.pdf"
-#furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q1_June_2022.pdf"
-#furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F21_22_Q4_March_2022.pdf"
-#furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F21_22_Q1_June_2021.pdf"
-#furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F19_20_Q4_March_2020.pdf"
-#furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F18_19_Q4_March_2019.pdf"
-#furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_Q4_March_2018.pdf"
-#furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F16_17_Q4_March_2017.pdf"
-## FILENAME for saving
-#fname <- "LMR_2022_06.pdf"
-#fname <- "LMR_2022_03.pdf"
-#fname <- "LMR_2021_06.pdf"
-#fname <- "LMR_2020_03.pdf"
-#fname <- "LMR_2019_03.pdf"
-#fname <- "LMR_2018_03.pdf"
-#fname <- "LMR_2017_03.pdf"
-## **END manual section ####
-
-## > DL & SAVE ####
-## DOWNLOAD and SAVE - using above set above
-download.file(furl, paste0("input/",fname), mode='wd')
-lmr <- pdf_text(paste0("input/",fname))
-## VIEW selected pages
-## table of contents 
-#cat(lmr[2])
-## intro incl notes on FISCAL YR (Apr 1 - Mar 31)
-#cat(lmr[3])
+## get functions
+source("functions/ldb_extract_functions.R")
+## this table used to merge in end dates at end in TIDY section
+ldb_fy <- fn_ldbfy()
 
 ## PROCESS DESCR. ####
-## Each table has sections that are identifiable by different formatting / content.
-## Different sections have different features that need to be parsed out.
-## Requires manual approach for each section of each table.
+## LDB QMR has pages with single table per page, different topic for each table, standard format/layout.
 ## Process below works by:
-## 1. grab the whole table
+## 0. Identify link and download PDF.
+## 1. Identify page with desired table and grab the whole table
 ## 2. extract, parse out column headings
 ## 3. process first section: parse out content for rows in section
 ## 4. process next section - add on to first
@@ -61,41 +29,53 @@ lmr <- pdf_text(paste0("input/",fname))
 ## 6. convert to data frame: above processing creates matrices, incl. final combined matrix
 ## 7. tidy - format into long tidy structure
 
-## FISCAL TBL ####
-## cols use reference to fiscal quarters
-## for BC LDB, fy quarters align with these end dates
-## this table used to merge in end dates at end in TIDY section
-ldb_fy <- fn_ldbfy()
-## BEER $ TABLE ####
+## GET DATA ####
+## START manual section ####
+## > SET SPECS ####
+## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
+## find link at: https://www.bcldb.com/publications/liquor-market-review 
+## LINK
+#furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q3_December_2022.pdf"
+#furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q2_September_2022.pdf"
+
+## FILENAME for saving
+fname <- "LMR_2022_06.pdf"
+## **END manual section ####
+
+## IMPORT PDF ####
+## Import if previously downloadable
+## Download, save, import if not already
+lmr <- fn_lmr(fname)
+## VIEW selected pages
+## table of contents 
+#cat(lmr[2])
+## intro incl notes on FISCAL YR (Apr 1 - Mar 31)
+#cat(lmr[3])
+
 ## 1. EXTRACT TBL ####
 ## extract beer $ sales table
-## page with beer table: info is messy and needs to be structured in table
-tbl_pg <- lmr[5]
-## split the whole page into rows at each \n (not actually visible)
-tbl_pg_rows <- strsplit(tbl_pg, "\n")
-## > GET TABLE ####
+## page with target table: info is messy and needs to be structured in table
+tbls_rows <- fn_tbls_rows()
+tbl_name <- "Beer Sales (Litres)"
+tbl_pg <- lmr[7]
+
+## > GET TABLE
 ## isolate actual table content only (remove additional text)
-tbl <- tbl_pg_rows[[1]][4:19]
+tbl <- fn_tbl_content(tbl_pg, tbls_rows, tbl_name)
 
 ## 2. COL HEADINGS ####
 ## - col headings for table
 ## isolate data column headings: Fiscal 2020/21 Q4, etc
 ## remove misc title, take out excess whitespace, add marker for splitting, split into fixed cols
-tbl_heading <- str_remove(tbl[1],"Net Sales \\$")
-tbl_heading <- str_squish(tbl_heading)
-tbl_heading <- str_replace_all(tbl_heading,"F","xF")
-tbl_heading <- str_split_fixed(tbl_heading, "x",6)
-## basic clean result - can be used with any sub-sections of table
-tbl_heading ## individual items - some trailing sp
-
-## add category and subcategory items to align with body of table
-tbl_heading[1] <- "subcategory"
-tbl_heading <- cbind("category",tbl_heading)
 ## headings df ready to be used below - just need to remove first row
+tbl_heading <- fn_tbl_heading(tbl)
+## REMOVE headings from tbl
+tbl <- tbl[-1] 
+tbl_bu2 <- tbl #backup
 
-## 3. REMOVE SUMMARY ROWS
+## 3. REMOVE SUMMARY ROWS ####
 ## remove Summary rows
-tbl_orig <- tbl #backup
+tbl_ns <- fn_smry_rows(tbl)
 ## cycle through and identify row numbers of summary rows
 sr <- NULL
 for(s in 1:length(tbl)){
@@ -108,20 +88,8 @@ tbl_nsmry <- tbl[c(sr*-1)] ## remove rows identified above
 tbl <- tbl_nsmry ## reset main tbl for usage below (dangerous)
 
 ## 3. REMOVE HEADING, FIRST COL ####
-## remove heading, since captured above
-tbl <- tbl[-1] 
-tbl_bu2 <- tbl #backup
-## REMOVE FIRST COL: manual values here but should create lookup db table for category map to subcategory
-for(c in 1:length(tbl)){
-  tbl[c] <- case_when(
-    str_detect(tbl[c],"Domestic - BC Beer") ~ str_replace(tbl[c],"Domestic - BC Beer",""),
-    str_detect(tbl[c],"Domestic - Other Province Beer") ~ str_replace(tbl[c],"Domestic - Other Province Beer",""),
-    str_detect(tbl[c],"Import Beer") ~ str_replace(tbl[c],"Import Beer",""),
-    TRUE ~ tbl[c]
-  )
-  ## take out empty white space
-  tbl[c] <- str_squish(tbl[c]) 
-}
+## REMOVE FIRST COL
+tbl_nfc <- fn_first_col(tbl_ns)
 
 ## 4. SPLIT TO COLS AND CLEAN ####
 ## split each row at $ sign ($ gets removed)
