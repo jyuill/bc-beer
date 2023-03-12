@@ -12,8 +12,9 @@ library(scales)
 library(glue)
 library(readr) ## for easy conversion of $ characters to numeric
 
-## get functions
+## GET FUNCTIONS
 source("functions/ldb_extract_functions.R")
+
 ## this table used to merge in end dates at end in TIDY section
 ldb_fy <- fn_ldbfy()
 
@@ -52,16 +53,18 @@ lmr <- fn_lmr(fname)
 ## intro incl notes on FISCAL YR (Apr 1 - Mar 31)
 #cat(lmr[3])
 
+## INFO ON TABLES
+## keep track of info related to different tables in LDB report
+tbls_info <- fn_tbls_info()
+
 ## 1. EXTRACT TBL ####
-## extract beer $ sales table
-## page with target table: info is messy and needs to be structured in table
-tbls_rows <- fn_tbls_rows()
-tbl_name <- "Beer Sales (Litres)"
-tbl_pg <- lmr[7]
+## SPECIFY TOPIC of interest
+data_topic <- "beer volume"
+tbl_info <- tbls_info %>% filter(topic==data_topic)
 
 ## > GET TABLE
 ## isolate actual table content only (remove additional text)
-tbl <- fn_tbl_content(tbl_pg, tbls_rows, tbl_name)
+tbl <- fn_tbl_content(tbl_info)
 
 ## 2. COL HEADINGS ####
 ## - col headings for table
@@ -70,93 +73,36 @@ tbl <- fn_tbl_content(tbl_pg, tbls_rows, tbl_name)
 ## headings df ready to be used below - just need to remove first row
 tbl_heading <- fn_tbl_heading(tbl)
 ## REMOVE headings from tbl
-tbl <- tbl[-1] 
-tbl_bu2 <- tbl #backup
+tbl_nh <- tbl[-1] 
 
 ## 3. REMOVE SUMMARY ROWS ####
 ## remove Summary rows
-tbl_ns <- fn_smry_rows(tbl)
-## cycle through and identify row numbers of summary rows
-sr <- NULL
-for(s in 1:length(tbl)){
-  if(str_detect(tbl[s], "Summary")){
-    sr = c(sr,s)
-  }
-}
-## table with no summary rows
-tbl_nsmry <- tbl[c(sr*-1)] ## remove rows identified above
-tbl <- tbl_nsmry ## reset main tbl for usage below (dangerous)
+tbl_ns <- fn_smry_rows(tbl_nh)
 
-## 3. REMOVE HEADING, FIRST COL ####
-## REMOVE FIRST COL
+## 3. REMOVE FIRST COL ####
 tbl_nfc <- fn_first_col(tbl_ns)
 
 ## 4. SPLIT TO COLS AND CLEAN ####
-## split each row at $ sign ($ gets removed)
-tbl_matrix <- str_split_fixed(tbl, "\\$", n=6)
-## remove remaining whitespace
-tbl_matrix <- apply(tbl_matrix, 2, str_squish)
+tbl_split_cols <- fn_split_cols(tbl_nfc)
 
 ## 5. CONV. TO DF, SET COL NAMES, CLEAN ####
-tbl_df <- data.frame(tbl_matrix)
-## > col names from headings taken earlier####
-## set col names based on row 1
-colnames(tbl_df) <- tbl_heading[-1] ## excluding first 'category' heading
-##
-tbl_df[,2:6] <- as.integer(tbl_df[,2:6])
-## > data clean
-## convert numbers in char form to numeric
-startcol <- 2 ## first col to convert
-for(i in startcol:ncol(tbl_df)){
-  tbl_df[,i] <- parse_number(tbl_df[,i])
-}
-tbl_df_bu <- tbl_df # backup
-## > col cleanup ####
-## clean column names for simplicity and to avoid probs later
-startcol <- 2 ## first col to clean up
-for(i in startcol:ncol(tbl_df)){
-  colnames(tbl_df)[i] <- str_replace(colnames(tbl_df)[i], 
-                                                  substr(colnames(tbl_df)[i],
-                                                         start=10, stop=12),"")
-}
-## finish clean up col names for simplicity, avoid probs later
-colnames(tbl_df) <- str_replace_all(colnames(tbl_df),"Fiscal","FY")
+tbl_df <- fn_tbl_dataframe(tbl_split_cols)
 
 ## 6. ADD BACK CATEGORIES ####
-## import existing for reference
-bs_data <- read_csv('input/beer_sales.csv')
-## get list of categories and subcategories
-bs_data_cat <- bs_data %>% group_by(category, subcategory) %>% summarize(count=n()) %>%
-  select(-count)
-## add categories and reorder table
-tbl_df_cat <- full_join(tbl_df, bs_data_cat, by=c('subcategory')) %>%
-  select('category','subcategory',c(2:ncol(tbl_df))) ## ncol(tbl_df) for number of cols in original tbl
+tbl_df_cat <- fn_first_col_return(tbl_df, tbl_info)
 
 ## 7. TIDY structure ####
-## > convert to long ####
-## convert table with metrics in multiple rows to tidy format
-tbl_df_t <- tbl_df_cat %>% pivot_longer(cols=c(3:ncol(tbl_df_cat)), names_to='period', values_to='netsales')
-## > add cols ####
-## add cols for period info
-tbl_df_t <- tbl_df_t %>% mutate(
-  qtr=substr(period, start=9, stop=10),
-  fyr=as.numeric(substr(period, start=4, stop=7)),
-  cyr=ifelse(qtr=='Q4',fyr, fyr-1)
-)
-## add end date (month - day) for quarters
-tbl_df_t <- full_join(tbl_df_t, ldb_fy, by='qtr')
-## add end date yr for time series
-tbl_df_t <- tbl_df_t %>% mutate(
-  end_qtr_dt=date(paste(cyr,end_dt, sep="-"))
-)
+tbl_df_t <- fn_tidy_structure(tbl_df_cat)
 
 ## 8. SAVE ####
 ## save latest only - since in db
-write_csv(tbl_df_t, 'input/beer_sales.csv')
-write_csv(tbl_df_t, paste0('input/beer_sales_',
-                           min(tbl_df_t$end_qtr_dt),'-',max(tbl_df_t$end_qtr_dt),'.csv'))
+write_csv(tbl_df_t, paste0('input/',tbl_info$ref_file,'.csv'))
+## save wide version with dates for the record
+write_csv(tbl_df_cat, paste0('input/',tbl_info$ref_file,'_wide-',str_replace(fname, 'pdf','csv')))
 
 ## 9. UPDATE DATABASE ####
+## NEED TO CREATE TABLES IN ADVANCE FOR NEW DATA TOPICS
+## - once created, ADD to tables info in ldb_extract_functions -> fn_tbls_info
 library(RMariaDB) ## NOTE: pwd blocked out for security -> need to add
 ## > connect ####
 ## from file in .gitignore
@@ -166,13 +112,13 @@ con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg'
 ## > insert ####
 for(i in 1:nrow(tbl_df_t)){
   ## test for existence of row - insert if not already exist
-  if(nrow(dbGetQuery(con, glue("SELECT * FROM tblLDB_beer_sales 
+  if(nrow(dbGetQuery(con, glue("SELECT * FROM {tbl_info$mysql_tbl}
                        WHERE category='{tbl_df_t$category[i]}' AND
                        subcategory='{tbl_df_t$subcategory[i]}' AND
                        qtr='{tbl_df_t$qtr[i]}' AND
                        fyr='{tbl_df_t$fyr[i]}';")))==0) {
     ## insert query
-    dbExecute(con, glue("INSERT INTO tblLDB_beer_sales (
+    dbExecute(con, glue("INSERT INTO {tbl_info$mysql_tbl} (
             category,
             subcategory,
             period,
