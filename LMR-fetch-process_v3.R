@@ -46,7 +46,7 @@ furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q2_September_20
 ## IMPORT PDF ####
 ## Import if previously downloaded
 ## Download, save, import if not already
-lmr <- fn_lmr(fname)
+lmr <- fn_lmr(furl)
 ## VIEW selected pages
 ## table of contents 
 #cat(lmr[2])

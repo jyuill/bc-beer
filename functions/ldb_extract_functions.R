@@ -21,7 +21,7 @@ fn_ldbfy <- function(){
   ldb_fy
 }
 ## get data - download if not already
-fn_lmr <- function(fname){
+fn_lmr <- function(furl){
   ## convert URL to filename in standard format so don't have to specify
   fname_url <- str_split(furl,"/")
   fname_url2 <- str_split(fname_url[[1]][5],"_")
