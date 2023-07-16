@@ -9,6 +9,7 @@ library(readr) ## for easy conversion of $ characters to numeric
 
 ## FY quarters
 ## cols use reference to fiscal quarters; BC LDB fy quarters align with end dates
+## - CONVERT TO MYSQL TABLE
 fn_ldbfy <- function(){
   ldb_fy <- tribble(
     ~qtr,~end_dt,
@@ -21,6 +22,18 @@ fn_ldbfy <- function(){
 }
 ## get data - download if not already
 fn_lmr <- function(fname){
+  ## convert URL to filename in standard format so don't have to specify
+  fname_url <- str_split(furl,"/")
+  fname_url2 <- str_split(fname_url[[1]][5],"_")
+  fname_url_qtr <- paste0("FY",fname_url2[[1]][5],fname_url2[[1]][6])
+  fname_url_yr <- str_split(fname_url2[[1]][8], "\\.")[[1]][1]
+  fname_url_mth <- case_when(
+    fname_url2[[1]][7] == 'March' ~ '03',
+    fname_url2[[1]][7] == 'June' ~ '06',
+    fname_url2[[1]][7] == 'September' ~ '09',
+    fname_url2[[1]][7] == 'December' ~ '12',
+  )
+  fname <- paste0("LMR_",fname_url_yr,"_",fname_url_mth,"_",fname_url_qtr,".pdf")
   pdf_file <- paste0("input/",fname)
   ## if file doesn't exist download it, otherwise import
   if(!file.exists(pdf_file)){

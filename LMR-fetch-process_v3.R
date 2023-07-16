@@ -36,15 +36,15 @@ ldb_fy <- fn_ldbfy()
 ## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
 ## find link at: https://www.bcldb.com/publications/liquor-market-review 
 ## LINK
+furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q2_September_2022.pdf"
 #furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q3_December_2022.pdf"
-#furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q2_September_2022.pdf"
 
 ## FILENAME for saving
-fname <- "LMR_2022_06.pdf"
+#fname <- now created automatically in fn_lmr function below -> avoids accidental overwrite
 ## **END manual section ####
 
 ## IMPORT PDF ####
-## Import if previously downloadable
+## Import if previously downloaded
 ## Download, save, import if not already
 lmr <- fn_lmr(fname)
 ## VIEW selected pages
