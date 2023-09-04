@@ -45,5 +45,13 @@ WHERE fy_qtr='FY2016Q4';
 -- MAIN TABLE
 -- rework/replace original
 CREATE TABLE bcbg.tblLDB_lmr (
-
+	lmr_id INTEGER AUTO_INCREMENT PRIMARY KEY,
+    fy_qtr VARCHAR(10),
+    cat_type VARCHAR(30),
+    category VARCHAR(30),
+    subcat VARCHAR(30),
+    netsales BIGINT,
+    litres BIGINT,
+    FOREIGN KEY(fy_qtr) REFERENCES tblLDB_quarter(fy_qtr)
 );
+SELECT * FROM bcbg.tblLDB_lmr;

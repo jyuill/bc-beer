@@ -58,3 +58,5 @@ for(q in 1:nrow(qtrs_full)){
     cat(qtrs_full[q, 1], "updated \n")
   }
 }
+## check table 
+tbl_qtrs <- dbGetQuery(con, "SELECT * FROM tblLDB_quarter;")
