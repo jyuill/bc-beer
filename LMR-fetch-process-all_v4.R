@@ -43,41 +43,55 @@ furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q4_March_2023_N
 ## - Download, save, import if not already, based on URL above
 lmr <- fn_lmr(furl)
 lmr_name <- unlist(lmr[2])
+lmr_name_clean <- str_remove(lmr_name,"\\.pdf")
 lmr <- unlist(lmr[1])
 ## - see 'pdftools-explore.R' for different ways to access page info
+## get report meta info
+title_pg <- unlist(strsplit(lmr[1], "\n"))
+title_pg_dt <- str_replace(trimws(title_pg[8])," ","_")
 
 ## 1. Look at each page to determine which ones have tables
 ## can skip the first 3 pgs - always cover, toc, intro
+tables_all_netsales <- data.frame()
+tables_all_litres <- data.frame()
 for(p in 4:length(lmr)){
   ## test for 'Item Subcategory' -> identifies chart pages
   if(str_detect(lmr[p],"Item Subcategory")){
     cat(p, "chart pg \n")  
-  } else if(str_detect(lmr[p], regex("Glossary", ignore_case = TRUE))){
+    } else if(str_detect(lmr[p], regex("Glossary", ignore_case = TRUE))){
       cat(p, "glossary page \n")
-    }
-    else { ## do the main thing
+    } else { ## do the main thing
       cat(p, "process the page")
-      cat("pg: ", pg_num, "\n")
+      cat("pg: ", p, "\n")
       ## get page content from PDF 
-      tbl_pg <- lmr[pg_num]
+      tbl_pg <- lmr[p]
       tbl_pg_rows <- unlist(strsplit(tbl_pg, "\n"))
       
       ## get meta data ####
       tbl_meta <- fn_pg_meta(tbl_pg_rows, p)
       
       ## process content
-      page_data <- fn_tbl_content(tbl_pg_rows, tbl_meta)
-      
+      page_data_tbls <- fn_tbl_content(tbl_pg_rows, tbl_meta)
     } ## end of the main page loop action
+  
+  ## save results for page - identifying report and table -> wide and long
+  tbl_wide <- page_data_tbls[[1]]
+  tbl_long <- page_data_tbls[[2]]
+  write_csv(tbl_wide, paste0('data/',lmr_name_clean,"-",tbl_name_clean,".csv"))
+  write_csv(tbl_long, paste0('data/',lmr_name_clean,"-",tbl_name_clean,"_long.csv"))
+  
+  ## add to existing data - depending on metric
+  if(tbl_meta[[3]]=='netsales'){
+    tables_all_netsales <- bind_rows(tables_all_netsales, tbl_long)
+  } else {
+    tables_all_litres <- bind_rows(tables_all_litres, tbl_long)
+  }
 } ## end page loop
-
+## COMBINE netsales + litres ####
+## - join tables with all pages/tables in each of netsales and litres as metrics
+## - join on all fields except metrics
 
 ##== old process ####
-
-
-
-## 7. TIDY structure ####
-tbl_df_t <- fn_tidy_structure(tbl_df_cat)
 
 ## 8. SAVE ####
 ## save latest only - since in db

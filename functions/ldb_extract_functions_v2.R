@@ -36,7 +36,13 @@ fn_lmr <- function(furl){
 fn_pg_meta <- function(tbl_pg_rows, pg_num){
   ## > get META data ####
   tbl_name <- trimws(tbl_pg_rows[1])
-  cat("pg:",pg_num,'tbl:', tbl_name,"\n")
+  
+  tbl_name_clean <- str_replace_all(tbl_name,"\\(","")
+  tbl_name_clean <- str_replace_all(tbl_name_clean,"\\)","")
+  tbl_name_clean <- str_replace_all(tbl_name_clean,"\\$","")
+  tbl_name_clean <- trimws(tbl_name_clean, "right")
+  tbl_name_clean <- str_replace_all(tbl_name_clean," ","_")
+  cat("pg:",pg_num,'tbl:', tbl_name_clean,"\n")
   ## check for prev same table name
   if(exists('tbl_name_prev')){
     if(tbl_name!=tbl_name_prev){
@@ -58,7 +64,7 @@ fn_pg_meta <- function(tbl_pg_rows, pg_num){
   )
   cat('metric:',tbl_metric,"\n")
   
-  return(list(tbl_name, tbl_cat_type, tbl_metric))
+  return(list(tbl_name_clean, tbl_cat_type, tbl_metric))
 }
 
 ## extract tbl content from pg
