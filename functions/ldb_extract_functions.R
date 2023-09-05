@@ -10,6 +10,7 @@ library(readr) ## for easy conversion of $ characters to numeric
 ## FY quarters
 ## cols use reference to fiscal quarters; BC LDB fy quarters align with end dates
 ## - CONVERT TO MYSQL TABLE
+## - tbl: tblLMR_quarters
 fn_ldbfy <- function(){
   ldb_fy <- tribble(
     ~qtr,~end_dt,
