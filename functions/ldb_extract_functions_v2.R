@@ -64,16 +64,17 @@ fn_pg_meta <- function(tbl_pg_rows, pg_num){
   )
   cat('metric:',tbl_metric,"\n")
   
-  return(list(tbl_name_clean, tbl_cat_type, tbl_metric))
+  return(list(tbl_name_clean, hrow, tbl_cat_type, tbl_metric))
 }
 
 ## extract tbl content from pg
 fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
-  cat("start content function \n")
+  cat("start content process function \n")
   ## unpack meta data
   tbl_name <- tbl_meta[[1]]
-  tbl_cat_type <- tbl_meta[[2]]
-  tbl_metric <- tbl_meta[[3]]
+  hrow <- tbl_meta[[2]] ## identifies heading row, depends on pg layout
+  tbl_cat_type <- tbl_meta[[3]]
+  tbl_metric <- tbl_meta[[4]]
   ## > RM SUMMARY ROWS ####
   cat("remove summary rows \n")
   srows <- NULL
@@ -90,6 +91,7 @@ fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
   tbl_heading <- unlist(str_split(tbl_pg_rows_ns[hrow], "\\s{2,}"))[c(-1,-2)] # drop first two: empty, metric name
   first_cols <- c("cat_type","category","subcategory")
   tbl_heading <- c(first_cols, tbl_heading)
+  ## initiate empty table with proper headings
   tbl <- data.frame(matrix(ncol=length(tbl_heading)))
   colnames(tbl) <- tbl_heading
   
@@ -97,16 +99,17 @@ fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
   ## get data from each row and add to table
   cat("process data \n")
   start <- hrow+1
-  tbl_all <- data.frame()
+  ## loop through each row to collect data
   for(r in start:length(tbl_pg_rows_ns)){
-    cat("row: ", r, "\n")
+    ## pre-defined tbl will accumulate rows through loop
+    cat("table row: ", r, "\n")
     row_content <- unlist(str_split(trimws(tbl_pg_rows_ns[r]), "\\s{2,}"))
     col_nums <- length(row_content)
     cat("col nums:", col_nums, "\n")
     if(col_nums>5){ ## only rows with data
       tr <- r-hrow ## set table row number by subtract pdf start num
       tbl[tr,"cat_type"] <- tbl_cat_type
-      if(col_nums==7){
+      if(col_nums==7){ ## rows with category shown
         tbl$category[tr] <- row_content[1]
         tbl$subcategory[tr] <- row_content[2]
         tbl[tr,c(4:(col_nums+1))] <- row_content[c(3:col_nums)]
@@ -116,19 +119,18 @@ fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
         tbl$subcategory[tr] <- row_content[1]
         tbl[tr,c(4:(col_nums+2))] <- row_content[c(2:col_nums)]
       }
-      tbl_all <- bind_rows(tbl_all, tbl)
-    }
+    } ## end row conditional
   } ## end single page loop
   
   ## TIDY FORMAT ####
-  tbl_long <- fn_tidy_structure(tbl_all, tbl_metric)
+  tbl_long <- fn_tidy_structure(tbl, tbl_metric)
   
   ## save table name for comparison with next table
   ## - in some cases, tables run over multiple pages
   tbl_name_prev <- tbl_name
   
   ## return tbl: wide and long
-  return(list(tbl_all, tbl_long))
+  return(list(tbl, tbl_long))
 }
 
 ## extend to long format

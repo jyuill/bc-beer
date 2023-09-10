@@ -12,9 +12,6 @@ library(scales)
 library(glue)
 library(readr) ## for easy conversion of $ characters to numeric
 
-## GET FUNCTIONS
-source("functions/ldb_extract_functions_v2.R")
-
 ## PROCESS DESCR. ####
 ## LDB QMR has pages with single table per page, different topic for each table, standard format/layout.
 ## Process below works by:
@@ -31,6 +28,9 @@ source("functions/ldb_extract_functions_v2.R")
 ## 7. tidy - format into long tidy structure
 
 ## PROCESS START ####
+## GET FUNCTIONS
+source("functions/ldb_extract_functions_v2.R")
+
 ## INPUT: LINK TO PDF ####
 ## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
 ## find link at: https://www.bcldb.com/publications/liquor-market-review 
@@ -61,31 +61,31 @@ for(p in 4:length(lmr)){
     } else if(str_detect(lmr[p], regex("Glossary", ignore_case = TRUE))){
       cat(p, "glossary page \n")
     } else { ## do the main thing
-      cat(p, "process the page")
-      cat("pg: ", p, "\n")
+      cat(p, "tbl pg: processing \n")
       ## get page content from PDF 
       tbl_pg <- lmr[p]
       tbl_pg_rows <- unlist(strsplit(tbl_pg, "\n"))
       
       ## get meta data ####
       tbl_meta <- fn_pg_meta(tbl_pg_rows, p)
+      tbl_name_clean <- tbl_meta[[1]]
       
-      ## process content
+      ## process content - pass in page content in rows, along with meta data
       page_data_tbls <- fn_tbl_content(tbl_pg_rows, tbl_meta)
+      
+      ## save results for page - identifying report and table -> wide and long
+      tbl_wide <- page_data_tbls[[1]]
+      tbl_long <- page_data_tbls[[2]]
+      write_csv(tbl_wide, paste0('data/',lmr_name_clean,"-",tbl_name_clean,".csv"))
+      write_csv(tbl_long, paste0('data/',lmr_name_clean,"-",tbl_name_clean,"_long.csv"))
+      
+      ## add to existing data - depending on metric
+      if(tbl_meta[[3]]=='netsales'){
+        tables_all_netsales <- bind_rows(tables_all_netsales, tbl_long)
+      } else {
+        tables_all_litres <- bind_rows(tables_all_litres, tbl_long)
+      }
     } ## end of the main page loop action
-  
-  ## save results for page - identifying report and table -> wide and long
-  tbl_wide <- page_data_tbls[[1]]
-  tbl_long <- page_data_tbls[[2]]
-  write_csv(tbl_wide, paste0('data/',lmr_name_clean,"-",tbl_name_clean,".csv"))
-  write_csv(tbl_long, paste0('data/',lmr_name_clean,"-",tbl_name_clean,"_long.csv"))
-  
-  ## add to existing data - depending on metric
-  if(tbl_meta[[3]]=='netsales'){
-    tables_all_netsales <- bind_rows(tables_all_netsales, tbl_long)
-  } else {
-    tables_all_litres <- bind_rows(tables_all_litres, tbl_long)
-  }
 } ## end page loop
 ## COMBINE netsales + litres ####
 ## - join tables with all pages/tables in each of netsales and litres as metrics
