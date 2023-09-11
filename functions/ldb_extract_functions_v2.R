@@ -33,7 +33,7 @@ fn_lmr <- function(furl){
 }
 
 ## get meta data from pg
-fn_pg_meta <- function(tbl_pg_rows, pg_num){
+fn_pg_meta <- function(tbl_pg_rows, pg_num, tbl_name_prev, tbl_cat_type){
   ## > get META data ####
   tbl_name <- trimws(tbl_pg_rows[1])
   
@@ -43,14 +43,14 @@ fn_pg_meta <- function(tbl_pg_rows, pg_num){
   tbl_name_clean <- trimws(tbl_name_clean, "right")
   tbl_name_clean <- str_replace_all(tbl_name_clean," ","_")
   cat("pg:",pg_num,'tbl:', tbl_name_clean,"\n")
-  ## check for prev same table name
+  ## check for prev same table name -> if so, keep using prev, since indicates continuation
   if(exists('tbl_name_prev')){
-    if(tbl_name!=tbl_name_prev){
-      tbl_cat_type <- tbl_pg_rows[3]
-      hrow <- 4
-    } else { ## if table name same as prev, use prev cat_type
+    if(tbl_name_clean==tbl_name_prev){
       tbl_cat_type <- tbl_cat_type
       hrow <- 2
+    } else { ## 
+      tbl_cat_type <- tbl_pg_rows[3]
+      hrow <- 4
     }
   } else {
     tbl_cat_type <- tbl_pg_rows[3]
@@ -123,7 +123,11 @@ fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
   } ## end single page loop
   
   ## TIDY FORMAT ####
+  if(rowSums(is.na(tbl))<2){
   tbl_long <- fn_tidy_structure(tbl, tbl_metric)
+  } else {
+    tbl_long <- NULL
+  }
   
   ## save table name for comparison with next table
   ## - in some cases, tables run over multiple pages
@@ -131,7 +135,7 @@ fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
   
   ## return tbl: wide and long
   return(list(tbl, tbl_long))
-}
+} ## end single page process
 
 ## extend to long format
 fn_tidy_structure <- function(tbl, tbl_metric){

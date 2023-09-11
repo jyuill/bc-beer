@@ -1,111 +1,121 @@
 cat_type,category,subcategory,period,netsales
-Spirits,Asian Spirits,China Spirits,Fiscal 2021/22 Q4,1413830
-Spirits,Asian Spirits,China Spirits,Fiscal 2022/23 Q1,1705567
-Spirits,Asian Spirits,China Spirits,Fiscal 2022/23 Q2,1018784
-Spirits,Asian Spirits,China Spirits,Fiscal 2022/23 Q3,1628744
-Spirits,Asian Spirits,China Spirits,Fiscal 2022/23 Q4,1335970
-Spirits,Asian Spirits,Korea Spirits,Fiscal 2021/22 Q4,1133764
-Spirits,Asian Spirits,Korea Spirits,Fiscal 2022/23 Q1,1361164
-Spirits,Asian Spirits,Korea Spirits,Fiscal 2022/23 Q2,982171
-Spirits,Asian Spirits,Korea Spirits,Fiscal 2022/23 Q3,1600847
-Spirits,Asian Spirits,Korea Spirits,Fiscal 2022/23 Q4,1305191
-Spirits,Asian Spirits,Other Country Asian Spirits,Fiscal 2021/22 Q4,189455
-Spirits,Asian Spirits,Other Country Asian Spirits,Fiscal 2022/23 Q1,166510
-Spirits,Asian Spirits,Other Country Asian Spirits,Fiscal 2022/23 Q2,136863
-Spirits,Asian Spirits,Other Country Asian Spirits,Fiscal 2022/23 Q3,241222
-Spirits,Asian Spirits,Other Country Asian Spirits,Fiscal 2022/23 Q4,149634
-Spirits,Gin,Dry Gin,Fiscal 2021/22 Q4,10522054
-Spirits,Gin,Dry Gin,Fiscal 2022/23 Q1,15388552
-Spirits,Gin,Dry Gin,Fiscal 2022/23 Q2,16680254
-Spirits,Gin,Dry Gin,Fiscal 2022/23 Q3,16028058
-Spirits,Gin,Dry Gin,Fiscal 2022/23 Q4,11048287
-Spirits,Gin,Flavoured Gin,Fiscal 2021/22 Q4,1036194
-Spirits,Gin,Flavoured Gin,Fiscal 2022/23 Q1,1679037
-Spirits,Gin,Flavoured Gin,Fiscal 2022/23 Q2,1654658
-Spirits,Gin,Flavoured Gin,Fiscal 2022/23 Q3,1461769
-Spirits,Gin,Flavoured Gin,Fiscal 2022/23 Q4,898417
-Spirits,Gin,Other Gin,Fiscal 2021/22 Q4,464933
-Spirits,Gin,Other Gin,Fiscal 2022/23 Q1,530155
-Spirits,Gin,Other Gin,Fiscal 2022/23 Q2,638681
-Spirits,Gin,Other Gin,Fiscal 2022/23 Q3,699861
-Spirits,Gin,Other Gin,Fiscal 2022/23 Q4,469567
-Spirits,Grape and Fruit Brandy,Armagnac,Fiscal 2021/22 Q4,129028
-Spirits,Grape and Fruit Brandy,Armagnac,Fiscal 2022/23 Q1,46629
-Spirits,Grape and Fruit Brandy,Armagnac,Fiscal 2022/23 Q2,39502
-Spirits,Grape and Fruit Brandy,Armagnac,Fiscal 2022/23 Q3,160271
-Spirits,Grape and Fruit Brandy,Armagnac,Fiscal 2022/23 Q4,168097
-Spirits,Grape and Fruit Brandy,Brandy,Fiscal 2021/22 Q4,2367067
-Spirits,Grape and Fruit Brandy,Brandy,Fiscal 2022/23 Q1,2433311
-Spirits,Grape and Fruit Brandy,Brandy,Fiscal 2022/23 Q2,2006840
-Spirits,Grape and Fruit Brandy,Brandy,Fiscal 2022/23 Q3,3819330
-Spirits,Grape and Fruit Brandy,Brandy,Fiscal 2022/23 Q4,2196191
-Spirits,Grape and Fruit Brandy,Cognac,Fiscal 2021/22 Q4,2482239
-Spirits,Grape and Fruit Brandy,Cognac,Fiscal 2022/23 Q1,2837134
-Spirits,Grape and Fruit Brandy,Cognac,Fiscal 2022/23 Q2,2148001
-Spirits,Grape and Fruit Brandy,Cognac,Fiscal 2022/23 Q3,4313175
-Spirits,Grape and Fruit Brandy,Cognac,Fiscal 2022/23 Q4,2548416
-Spirits,Grape and Fruit Brandy,Eau de Vie,Fiscal 2021/22 Q4,196062
-Spirits,Grape and Fruit Brandy,Eau de Vie,Fiscal 2022/23 Q1,419570
-Spirits,Grape and Fruit Brandy,Eau de Vie,Fiscal 2022/23 Q2,209354
-Spirits,Grape and Fruit Brandy,Eau de Vie,Fiscal 2022/23 Q3,405605
-Spirits,Grape and Fruit Brandy,Eau de Vie,Fiscal 2022/23 Q4,238699
-Spirits,Grape and Fruit Brandy,Grappa And Marc,Fiscal 2021/22 Q4,71416
-Spirits,Grape and Fruit Brandy,Grappa And Marc,Fiscal 2022/23 Q1,81634
-Spirits,Grape and Fruit Brandy,Grappa And Marc,Fiscal 2022/23 Q2,51347
-Spirits,Grape and Fruit Brandy,Grappa And Marc,Fiscal 2022/23 Q3,130043
-Spirits,Grape and Fruit Brandy,Grappa And Marc,Fiscal 2022/23 Q4,71564
-Spirits,Grape and Fruit Brandy,Pisco,Fiscal 2021/22 Q4,101091
-Spirits,Grape and Fruit Brandy,Pisco,Fiscal 2022/23 Q1,114010
-Spirits,Grape and Fruit Brandy,Pisco,Fiscal 2022/23 Q2,96138
-Spirits,Grape and Fruit Brandy,Pisco,Fiscal 2022/23 Q3,164233
-Spirits,Grape and Fruit Brandy,Pisco,Fiscal 2022/23 Q4,105858
-Spirits,Liqueurs,Anise And Herbal/Spice Liqueurs,Fiscal 2021/22 Q4,7651475
-Spirits,Liqueurs,Anise And Herbal/Spice Liqueurs,Fiscal 2022/23 Q1,9363445
-Spirits,Liqueurs,Anise And Herbal/Spice Liqueurs,Fiscal 2022/23 Q2,7622633
-Spirits,Liqueurs,Anise And Herbal/Spice Liqueurs,Fiscal 2022/23 Q3,11837081
-Spirits,Liqueurs,Anise And Herbal/Spice Liqueurs,Fiscal 2022/23 Q4,8402226
-Spirits,Liqueurs,Coffee And Cocoa Liqueurs,Fiscal 2021/22 Q4,1448185
-Spirits,Liqueurs,Coffee And Cocoa Liqueurs,Fiscal 2022/23 Q1,1915480
-Spirits,Liqueurs,Coffee And Cocoa Liqueurs,Fiscal 2022/23 Q2,1802352
-Spirits,Liqueurs,Coffee And Cocoa Liqueurs,Fiscal 2022/23 Q3,3588010
-Spirits,Liqueurs,Coffee And Cocoa Liqueurs,Fiscal 2022/23 Q4,1617615
-Spirits,Liqueurs,Cream/Dairy Liqueurs,Fiscal 2021/22 Q4,6608879
-Spirits,Liqueurs,Cream/Dairy Liqueurs,Fiscal 2022/23 Q1,8206750
-Spirits,Liqueurs,Cream/Dairy Liqueurs,Fiscal 2022/23 Q2,8165807
-Spirits,Liqueurs,Cream/Dairy Liqueurs,Fiscal 2022/23 Q3,23991436
-Spirits,Liqueurs,Cream/Dairy Liqueurs,Fiscal 2022/23 Q4,6370929
-Spirits,Liqueurs,Fruit Liqueurs,Fiscal 2021/22 Q4,4591610
-Spirits,Liqueurs,Fruit Liqueurs,Fiscal 2022/23 Q1,6074033
-Spirits,Liqueurs,Fruit Liqueurs,Fiscal 2022/23 Q2,6059357
-Spirits,Liqueurs,Fruit Liqueurs,Fiscal 2022/23 Q3,7153401
-Spirits,Liqueurs,Fruit Liqueurs,Fiscal 2022/23 Q4,5093348
-Spirits,Liqueurs,Nut Liqueurs,Fiscal 2021/22 Q4,1236941
-Spirits,Liqueurs,Nut Liqueurs,Fiscal 2022/23 Q1,1756331
-Spirits,Liqueurs,Nut Liqueurs,Fiscal 2022/23 Q2,1694919
-Spirits,Liqueurs,Nut Liqueurs,Fiscal 2022/23 Q3,2182890
-Spirits,Liqueurs,Nut Liqueurs,Fiscal 2022/23 Q4,1260482
-Spirits,Liqueurs,Other Liqueurs,Fiscal 2021/22 Q4,875993
-Spirits,Liqueurs,Other Liqueurs,Fiscal 2022/23 Q1,1128801
-Spirits,Liqueurs,Other Liqueurs,Fiscal 2022/23 Q2,1049965
-Spirits,Liqueurs,Other Liqueurs,Fiscal 2022/23 Q3,1528604
-Spirits,Liqueurs,Other Liqueurs,Fiscal 2022/23 Q4,939744
-Spirits,Liqueurs,Whiskey Liqueurs,Fiscal 2021/22 Q4,1382822
-Spirits,Liqueurs,Whiskey Liqueurs,Fiscal 2022/23 Q1,1522816
-Spirits,Liqueurs,Whiskey Liqueurs,Fiscal 2022/23 Q2,1253170
-Spirits,Liqueurs,Whiskey Liqueurs,Fiscal 2022/23 Q3,1879759
-Spirits,Liqueurs,Whiskey Liqueurs,Fiscal 2022/23 Q4,1457130
-Spirits,Other Spirits,Cachaca,Fiscal 2021/22 Q4,14264
-Spirits,Other Spirits,Cachaca,Fiscal 2022/23 Q1,65712
-Spirits,Other Spirits,Cachaca,Fiscal 2022/23 Q2,47904
-Spirits,Other Spirits,Cachaca,Fiscal 2022/23 Q3,43183
-Spirits,Other Spirits,Cachaca,Fiscal 2022/23 Q4,34535
-Spirits,Other Spirits,Flavoured Spirits,Fiscal 2021/22 Q4,86171
-Spirits,Other Spirits,Flavoured Spirits,Fiscal 2022/23 Q1,160878
-Spirits,Other Spirits,Flavoured Spirits,Fiscal 2022/23 Q2,170943
-Spirits,Other Spirits,Flavoured Spirits,Fiscal 2022/23 Q3,400100
-Spirits,Other Spirits,Flavoured Spirits,Fiscal 2022/23 Q4,70209
-Spirits,Other Spirits,Miscellaneous/Other Spirits,Fiscal 2021/22 Q4,259938
-Spirits,Other Spirits,Miscellaneous/Other Spirits,Fiscal 2022/23 Q1,336682
-Spirits,Other Spirits,Miscellaneous/Other Spirits,Fiscal 2022/23 Q2,292724
-Spirits,Other Spirits,Miscellaneous/Other Spirits,Fiscal 2022/23 Q3,411042
-Spirits,Other Spirits,Miscellaneous/Other Spirits,Fiscal 2022/23 Q4,236052
+Spirits,Other Spirits,Moonshine Spirits,Fiscal 2021/22 Q4,269458
+Spirits,Other Spirits,Moonshine Spirits,Fiscal 2022/23 Q1,381575
+Spirits,Other Spirits,Moonshine Spirits,Fiscal 2022/23 Q2,406568
+Spirits,Other Spirits,Moonshine Spirits,Fiscal 2022/23 Q3,656506
+Spirits,Other Spirits,Moonshine Spirits,Fiscal 2022/23 Q4,390965
+Spirits,Other Spirits,Ready to Mix Cocktails,Fiscal 2021/22 Q4,421451
+Spirits,Other Spirits,Ready to Mix Cocktails,Fiscal 2022/23 Q1,653454
+Spirits,Other Spirits,Ready to Mix Cocktails,Fiscal 2022/23 Q2,532448
+Spirits,Other Spirits,Ready to Mix Cocktails,Fiscal 2022/23 Q3,561077
+Spirits,Other Spirits,Ready to Mix Cocktails,Fiscal 2022/23 Q4,506119
+Spirits,Other Spirits,Ready to Serve Cocktails,Fiscal 2021/22 Q4,1136391
+Spirits,Other Spirits,Ready to Serve Cocktails,Fiscal 2022/23 Q1,1705867
+Spirits,Other Spirits,Ready to Serve Cocktails,Fiscal 2022/23 Q2,1860646
+Spirits,Other Spirits,Ready to Serve Cocktails,Fiscal 2022/23 Q3,1728361
+Spirits,Other Spirits,Ready to Serve Cocktails,Fiscal 2022/23 Q4,1301985
+Spirits,Other Spirits,Schnapps and Akvavit,Fiscal 2021/22 Q4,47108
+Spirits,Other Spirits,Schnapps and Akvavit,Fiscal 2022/23 Q1,58585
+Spirits,Other Spirits,Schnapps and Akvavit,Fiscal 2022/23 Q2,39800
+Spirits,Other Spirits,Schnapps and Akvavit,Fiscal 2022/23 Q3,71312
+Spirits,Other Spirits,Schnapps and Akvavit,Fiscal 2022/23 Q4,42768
+Spirits,Rum,Amber Rum,Fiscal 2021/22 Q4,5313462
+Spirits,Rum,Amber Rum,Fiscal 2022/23 Q1,6346520
+Spirits,Rum,Amber Rum,Fiscal 2022/23 Q2,6023552
+Spirits,Rum,Amber Rum,Fiscal 2022/23 Q3,9370492
+Spirits,Rum,Amber Rum,Fiscal 2022/23 Q4,5203026
+Spirits,Rum,Dark Rum,Fiscal 2021/22 Q4,2800161
+Spirits,Rum,Dark Rum,Fiscal 2022/23 Q1,3012374
+Spirits,Rum,Dark Rum,Fiscal 2022/23 Q2,2530120
+Spirits,Rum,Dark Rum,Fiscal 2022/23 Q3,4636316
+Spirits,Rum,Dark Rum,Fiscal 2022/23 Q4,2379644
+Spirits,Rum,Flavoured Rum,Fiscal 2021/22 Q4,670218
+Spirits,Rum,Flavoured Rum,Fiscal 2022/23 Q1,773320
+Spirits,Rum,Flavoured Rum,Fiscal 2022/23 Q2,673294
+Spirits,Rum,Flavoured Rum,Fiscal 2022/23 Q3,771760
+Spirits,Rum,Flavoured Rum,Fiscal 2022/23 Q4,490232
+Spirits,Rum,Spiced Rum,Fiscal 2021/22 Q4,6163519
+Spirits,Rum,Spiced Rum,Fiscal 2022/23 Q1,7656607
+Spirits,Rum,Spiced Rum,Fiscal 2022/23 Q2,7374748
+Spirits,Rum,Spiced Rum,Fiscal 2022/23 Q3,14089515
+Spirits,Rum,Spiced Rum,Fiscal 2022/23 Q4,6277696
+Spirits,Rum,White Rum,Fiscal 2021/22 Q4,5585375
+Spirits,Rum,White Rum,Fiscal 2022/23 Q1,7250317
+Spirits,Rum,White Rum,Fiscal 2022/23 Q2,7349438
+Spirits,Rum,White Rum,Fiscal 2022/23 Q3,7933138
+Spirits,Rum,White Rum,Fiscal 2022/23 Q4,5733294
+Spirits,Tequila,Blanco/Silver Tequila,Fiscal 2021/22 Q4,5512358
+Spirits,Tequila,Blanco/Silver Tequila,Fiscal 2022/23 Q1,9058701
+Spirits,Tequila,Blanco/Silver Tequila,Fiscal 2022/23 Q2,9825731
+Spirits,Tequila,Blanco/Silver Tequila,Fiscal 2022/23 Q3,9194962
+Spirits,Tequila,Blanco/Silver Tequila,Fiscal 2022/23 Q4,7009150
+Spirits,Tequila,Flavoured Tequila,Fiscal 2021/22 Q4,304786
+Spirits,Tequila,Flavoured Tequila,Fiscal 2022/23 Q1,458135
+Spirits,Tequila,Flavoured Tequila,Fiscal 2022/23 Q2,345750
+Spirits,Tequila,Flavoured Tequila,Fiscal 2022/23 Q3,812776
+Spirits,Tequila,Flavoured Tequila,Fiscal 2022/23 Q4,535606
+Spirits,Tequila,Gold Tequila,Fiscal 2021/22 Q4,8884822
+Spirits,Tequila,Gold Tequila,Fiscal 2022/23 Q1,12813947
+Spirits,Tequila,Gold Tequila,Fiscal 2022/23 Q2,12625685
+Spirits,Tequila,Gold Tequila,Fiscal 2022/23 Q3,13230184
+Spirits,Tequila,Gold Tequila,Fiscal 2022/23 Q4,10168127
+Spirits,Tequila,Mezcal,Fiscal 2021/22 Q4,821324
+Spirits,Tequila,Mezcal,Fiscal 2022/23 Q1,1105069
+Spirits,Tequila,Mezcal,Fiscal 2022/23 Q2,925485
+Spirits,Tequila,Mezcal,Fiscal 2022/23 Q3,1301602
+Spirits,Tequila,Mezcal,Fiscal 2022/23 Q4,898931
+Spirits,Vodka,Flavoured Vodka,Fiscal 2021/22 Q4,4098357
+Spirits,Vodka,Flavoured Vodka,Fiscal 2022/23 Q1,6438484
+Spirits,Vodka,Flavoured Vodka,Fiscal 2022/23 Q2,6031555
+Spirits,Vodka,Flavoured Vodka,Fiscal 2022/23 Q3,6128636
+Spirits,Vodka,Flavoured Vodka,Fiscal 2022/23 Q4,4818632
+Spirits,Vodka,Straight Vodka,Fiscal 2021/22 Q4,46903658
+Spirits,Vodka,Straight Vodka,Fiscal 2022/23 Q1,57855947
+Spirits,Vodka,Straight Vodka,Fiscal 2022/23 Q2,58375356
+Spirits,Vodka,Straight Vodka,Fiscal 2022/23 Q3,64448879
+Spirits,Vodka,Straight Vodka,Fiscal 2022/23 Q4,49848432
+Spirits,Whisky,American Whiskey,Fiscal 2021/22 Q4,2388347
+Spirits,Whisky,American Whiskey,Fiscal 2022/23 Q1,3149190
+Spirits,Whisky,American Whiskey,Fiscal 2022/23 Q2,2408393
+Spirits,Whisky,American Whiskey,Fiscal 2022/23 Q3,4440420
+Spirits,Whisky,American Whiskey,Fiscal 2022/23 Q4,2752239
+Spirits,Whisky,Blended Malt Scotch Whisky,Fiscal 2021/22 Q4,209684
+Spirits,Whisky,Blended Malt Scotch Whisky,Fiscal 2022/23 Q1,200629
+Spirits,Whisky,Blended Malt Scotch Whisky,Fiscal 2022/23 Q2,165290
+Spirits,Whisky,Blended Malt Scotch Whisky,Fiscal 2022/23 Q3,266077
+Spirits,Whisky,Blended Malt Scotch Whisky,Fiscal 2022/23 Q4,281678
+Spirits,Whisky,Blended Scotch Whisky,Fiscal 2021/22 Q4,7205015
+Spirits,Whisky,Blended Scotch Whisky,Fiscal 2022/23 Q1,8644177
+Spirits,Whisky,Blended Scotch Whisky,Fiscal 2022/23 Q2,6798876
+Spirits,Whisky,Blended Scotch Whisky,Fiscal 2022/23 Q3,11485521
+Spirits,Whisky,Blended Scotch Whisky,Fiscal 2022/23 Q4,7572461
+Spirits,Whisky,Bourbon Whiskey,Fiscal 2021/22 Q4,5370282
+Spirits,Whisky,Bourbon Whiskey,Fiscal 2022/23 Q1,6766552
+Spirits,Whisky,Bourbon Whiskey,Fiscal 2022/23 Q2,4851660
+Spirits,Whisky,Bourbon Whiskey,Fiscal 2022/23 Q3,9095583
+Spirits,Whisky,Bourbon Whiskey,Fiscal 2022/23 Q4,5878635
+Spirits,Whisky,Canadian Whisky,Fiscal 2021/22 Q4,24539397
+Spirits,Whisky,Canadian Whisky,Fiscal 2022/23 Q1,30370202
+Spirits,Whisky,Canadian Whisky,Fiscal 2022/23 Q2,27129558
+Spirits,Whisky,Canadian Whisky,Fiscal 2022/23 Q3,38457482
+Spirits,Whisky,Canadian Whisky,Fiscal 2022/23 Q4,25541630
+Spirits,Whisky,Flavoured Whisky,Fiscal 2021/22 Q4,280514
+Spirits,Whisky,Flavoured Whisky,Fiscal 2022/23 Q1,298432
+Spirits,Whisky,Flavoured Whisky,Fiscal 2022/23 Q2,237687
+Spirits,Whisky,Flavoured Whisky,Fiscal 2022/23 Q3,1020953
+Spirits,Whisky,Flavoured Whisky,Fiscal 2022/23 Q4,364651
+Spirits,Whisky,Irish Whiskey,Fiscal 2021/22 Q4,5802216
+Spirits,Whisky,Irish Whiskey,Fiscal 2022/23 Q1,5305687
+Spirits,Whisky,Irish Whiskey,Fiscal 2022/23 Q2,5118210
+Spirits,Whisky,Irish Whiskey,Fiscal 2022/23 Q3,8874455
+Spirits,Whisky,Irish Whiskey,Fiscal 2022/23 Q4,5949074
+Spirits,Whisky,Other Country Whisky,Fiscal 2021/22 Q4,1105928
+Spirits,Whisky,Other Country Whisky,Fiscal 2022/23 Q1,1868961
+Spirits,Whisky,Other Country Whisky,Fiscal 2022/23 Q2,965549
+Spirits,Whisky,Other Country Whisky,Fiscal 2022/23 Q3,2851930
+Spirits,Whisky,Other Country Whisky,Fiscal 2022/23 Q4,1463444
+Spirits,Whisky,Single Malt Scotch Whisky,Fiscal 2021/22 Q4,10143243
+Spirits,Whisky,Single Malt Scotch Whisky,Fiscal 2022/23 Q1,13539095
+Spirits,Whisky,Single Malt Scotch Whisky,Fiscal 2022/23 Q2,8287972
+Spirits,Whisky,Single Malt Scotch Whisky,Fiscal 2022/23 Q3,21208820
+Spirits,Whisky,Single Malt Scotch Whisky,Fiscal 2022/23 Q4,11802807

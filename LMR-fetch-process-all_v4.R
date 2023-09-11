@@ -54,6 +54,9 @@ title_pg_dt <- str_replace(trimws(title_pg[8])," ","_")
 ## can skip the first 3 pgs - always cover, toc, intro
 tables_all_netsales <- data.frame()
 tables_all_litres <- data.frame()
+tbl_name_prev <- "" ## set start prev pg name, used for tables that continue over pgs 
+tbl_cat_type <- ""
+## START LOOP
 for(p in 4:length(lmr)){
   ## test for 'Item Subcategory' -> identifies chart pages
   if(str_detect(lmr[p],"Item Subcategory")){
@@ -67,29 +70,35 @@ for(p in 4:length(lmr)){
       tbl_pg_rows <- unlist(strsplit(tbl_pg, "\n"))
       
       ## get meta data ####
-      tbl_meta <- fn_pg_meta(tbl_pg_rows, p)
+      tbl_meta <- fn_pg_meta(tbl_pg_rows, p, tbl_name_prev, tbl_cat_type)
       tbl_name_clean <- tbl_meta[[1]]
+      tbl_name_prev <- tbl_name_clean
+      tbl_cat_type <- tbl_meta[[3]]
       
       ## process content - pass in page content in rows, along with meta data
       page_data_tbls <- fn_tbl_content(tbl_pg_rows, tbl_meta)
-      
+
       ## save results for page - identifying report and table -> wide and long
-      tbl_wide <- page_data_tbls[[1]]
-      tbl_long <- page_data_tbls[[2]]
-      write_csv(tbl_wide, paste0('data/',lmr_name_clean,"-",tbl_name_clean,".csv"))
-      write_csv(tbl_long, paste0('data/',lmr_name_clean,"-",tbl_name_clean,"_long.csv"))
-      
-      ## add to existing data - depending on metric
-      if(tbl_meta[[3]]=='netsales'){
-        tables_all_netsales <- bind_rows(tables_all_netsales, tbl_long)
-      } else {
-        tables_all_litres <- bind_rows(tables_all_litres, tbl_long)
-      }
+      ## confirm that table returned has data -> any more than 1 NA in first row, skip it
+      if(rowSums(is.na(page_data_tbls[[1]][1,]))<2){
+        tbl_wide <- page_data_tbls[[1]]
+        tbl_long <- page_data_tbls[[2]]
+        write_csv(tbl_wide, paste0('data/',lmr_name_clean,"-",tbl_name_clean,".csv"))
+        write_csv(tbl_long, paste0('data/',lmr_name_clean,"-",tbl_name_clean,"_long.csv"))
+        
+        ## add to existing data - depending on metric
+        if(tbl_meta[[4]]=='netsales'){
+          tables_all_netsales <- bind_rows(tables_all_netsales, tbl_long)
+        } else {
+          tables_all_litres <- bind_rows(tables_all_litres, tbl_long)
+        }
+      } ## end save & append section
     } ## end of the main page loop action
 } ## end page loop
 ## COMBINE netsales + litres ####
 ## - join tables with all pages/tables in each of netsales and litres as metrics
 ## - join on all fields except metrics
+tables_all <- full_join(tables_all_litres, tables_all_netsales, by=c("cat_type", "category", "subcategory", "period"))
 
 ##== old process ####
 
