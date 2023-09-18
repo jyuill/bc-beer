@@ -100,16 +100,17 @@ for(p in 4:length(lmr)){
 ## - join on all fields except metrics
 tables_all <- full_join(tables_all_litres, tables_all_netsales, by=c("cat_type", "category", "subcategory", "period"))
 
-##== old process ####
+## simplify period format and rename to fy_qtr to match MySQL database
+## from 'Fiscal 2021/22 Q4' to 'FY2022Q4'
+tables_all_fyqtr <- tables_all %>% mutate(
+  fy_qtr = str_replace(period, "Fiscal ", "FY"),
+  fy_qtr = str_replace_all(str_remove(fy_qtr, str_sub(fy_qtr, start=5, end=7))," ","")
+) %>% select(-period)
 
-## 8. SAVE ####
-## save latest only - since in db
-write_csv(tbl_df_t, paste0('input/',tbl_info$ref_file,'.csv'))
-## save wide version with dates for the record
-write_csv(tbl_df_cat, paste0('input/',tbl_info$ref_file,'_wide-',str_replace(fname, 'pdf','csv')))
+###== old process ####
 
-## 9. UPDATE DATABASE ####
-## NEED TO CREATE TABLES IN ADVANCE FOR NEW DATA TOPICS
+## 9. REDO: UPDATE MySQL ####
+## NEW TABLE AVAILABLE - NEED TO CHANGE BELOW TO ALIGN WITH NEW ARCHITECTURE
 ## - once created, ADD to tables info in ldb_extract_functions -> fn_tbls_info
 library(RMariaDB) ## NOTE: pwd blocked out for security -> need to add
 ## > connect ####
@@ -120,6 +121,9 @@ con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg'
 ## > insert ####
 for(i in 1:nrow(tbl_df_t)){
   ## test for existence of row - insert if not already exist
+  ## may want to change this to delete existing row from latest data set
+  ##. on assumption that newest data is most accurate
+  ## - change this from nrow test to DELETE where condition met
   if(nrow(dbGetQuery(con, glue("SELECT * FROM {tbl_info$mysql_tbl}
                        WHERE category='{tbl_df_t$category[i]}' AND
                        subcategory='{tbl_df_t$subcategory[i]}' AND
@@ -149,6 +153,16 @@ for(i in 1:nrow(tbl_df_t)){
           );"))
   } ## end test IF
 } ## end insert loop
+## END OLD 
+## NEW QUERY ####
+mysql_tbl <- "bcbg.tblLDB_lmr"
+for(r in 1:nrow(tables_all_fyqtr)) {
+  ## delete any existing match
+  dbGetQuery(con, glue("DELETE FROM {mysql_tbl}
+                       WHERE ...."))
+  ## insert row
+  dbGetQuery(con, glue("INSERT "))
+}
 
 ## always disconnect when done
 dbDisconnect(con)

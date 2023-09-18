@@ -49,9 +49,12 @@ CREATE TABLE bcbg.tblLDB_lmr (
     fy_qtr VARCHAR(10),
     cat_type VARCHAR(30),
     category VARCHAR(30),
-    subcat VARCHAR(30),
+    subcategory VARCHAR(30),
     netsales BIGINT,
     litres BIGINT,
     FOREIGN KEY(fy_qtr) REFERENCES tblLDB_quarter(fy_qtr)
 );
+-- rename original subcat to subcategory for clarity (changed above for future)
+ALTER TABLE bcbg.tblLDB_lmr CHANGE COLUMN subcat subcategory VARCHAR(30);
+
 SELECT * FROM bcbg.tblLDB_lmr;
