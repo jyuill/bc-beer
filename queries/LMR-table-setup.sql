@@ -7,7 +7,7 @@
 -- CATEGORY TABLE
 -- table for beverage categories and subcategories from report, assigned to a category type
 -- CANCELLED: decided not needed, since categories are stable and not likely to be changed/extended/collapsed/aggregated
-CREATE TABLE bcbg.tblLDB_category (
+-- CREATE TABLE bcbg.tblLDB_category (
 cat_id INTEGER AUTO_INCREMENT PRIMARY KEY,
 cat_type VARCHAR(30), 
 category VARCHAR(30),
