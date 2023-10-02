@@ -12,14 +12,18 @@ library(scales)
 library(glue)
 library(here)
 library(readr) ## for easy conversion of $ characters to numeric
+## clear environment to avoid confusion
+rm(list=ls())
 
 ## 1. MANUAL INPUT: LINK TO PDF ####
 ## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
 ## find link at: https://www.bcldb.com/publications/liquor-market-review 
 ## older reports: https://www.bcldb.com/publications/archives?y%5Bvalue%5D%5Byear%5D=&r=4&b= 
+furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F23_24_Q1_June_2023.pdf"
+## > rest of process is automated to end > run via 'Source'
 
-furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F16_17_Q2_September_2016.pdf"
-## > rest of process is automated to end
+## Load functions ####
+source("functions/ldb_extract_functions_v2.R")
 
 ## PROCESS DESCR. ####
 ## LDB QMR has pages with single table per page
@@ -41,8 +45,6 @@ furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F16_17_Q2_Septembe
 ## 7. Upload to database -> delete any existing rows for period and overwrite with latest data.
 
 ## PROCESS START ####
-## GET FUNCTIONS
-source("functions/ldb_extract_functions_v2.R")
 
 ## 2. IMPORT PDF ####
 ## Function to:
@@ -130,6 +132,11 @@ tables_all_fyqtr <- tables_all %>% mutate(
 ## table for upload
 tbl_save <- here('output',paste0(lmr_name_clean,"_db_upload.csv"))
 write_csv(tables_all_fyqtr, here('output',paste0(lmr_name_clean,"_db_upload.csv")))
+
+## > data check ####
+# quick check by category
+data_check <- tables_all_fyqtr
+fn_data_check(data_check)
 
 ## 5. UPDATE MySQL ####
 ## currently in lmr_db_upload.R

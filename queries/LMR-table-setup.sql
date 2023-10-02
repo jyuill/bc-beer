@@ -1,7 +1,7 @@
 /* CREATE LDB TABLES
 - Raw SQL queries -> this file available in R repo AND in MySQL Workbench
 - develop/save in R -> run in MySQL Workbench
-- Or make connection to MySQL in R, use dbGetQuery
+- Or make connection to MySQL in R, use dbExecute (for insert, update, delete) or dbGetQuery (for select)
 - Purpose:
 - going beyond beer to capture organized data for all beverages in Quarterly Market Report
 - using some basic database normalization -> more complicated than flat table but better aligned with best practice
@@ -42,7 +42,7 @@ season VARCHAR(10)
 SELECT * FROM bcbg.tblLDB_quarter;
 -- insert values - test; will do the main work in R
 INSERT INTO bcbg.tblLDB_quarter VALUES
-('FY2016Q3',2016,'Q3','12-31','2015-12-31',2015,'winter');
+('FY2024Q1',2023,'Q1','06-30','2023-06-30',2023,'summer');
 
 -- can also use Form editor in MySQL Workbench Form Editor!
 -- fix incorrect

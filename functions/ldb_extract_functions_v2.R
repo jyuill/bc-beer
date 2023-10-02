@@ -7,30 +7,50 @@ library(scales)
 library(glue)
 library(readr) ## for easy conversion of $ characters to numeric
 
+## > Clean file name, DL ####
 ## get data - download if not already
 fn_lmr <- function(furl){
   ## convert URL to filename in standard format so don't have to specify
   furl_clean <- str_replace_all(furl,"%20","_") # replace %20 (if any) with "_" for clean URL
   fname_url <- str_split(furl_clean,"/")
-  fname_url2 <- str_split(fname_url[[1]][5],"_")
-  fname_url_qtr <- paste0("FY",fname_url2[[1]][5],fname_url2[[1]][6])
-  fname_url_yr <- str_split(fname_url2[[1]][8], "\\.")[[1]][1]
-  fname_url_mth <- case_when(
-    fname_url2[[1]][7] == 'March' ~ '03',
-    fname_url2[[1]][7] == 'June' ~ '06',
-    fname_url2[[1]][7] == 'September' ~ '09',
-    fname_url2[[1]][7] == 'December' ~ '12',
-  )
+  fname_url2 <- str_split(fname_url[[1]][5],"_")[[1]]
+  if(length(fname_url2)>=8){ # typically 8 components; sometimes 9 if prepended with '_2' or '_new'
+    fname_url_qtr <- paste0("FY",fname_url2[5],fname_url2[6])
+    fname_url_yr <- str_split(fname_url2[8], "\\.")[[1]][1]
+    fname_url_mth <- case_when(
+      fname_url2[7] == 'March' ~ '03',
+      fname_url2[7] == 'June' ~ '06',
+      fname_url2[7] == 'September' ~ '09',
+      fname_url2[7] == 'December' ~ '12',
+    )
+  } else if (length(fname_url2)==6){ ## cases where URL doesn't include FY reference
+    fname_url_yr <- fname_url2[6] %>% str_replace("\\.pdf","")
+    fname_url_cyr <- as.numeric(str_replace(fname_url_yr,"20",""))
+    # if March, FY same as CY -> otherwise add 1
+    if(fname_url2[5]=='March'){
+      fname_fy <- fname_url_cyr
+    } else {
+      fname_fy <- fname_url_cyr+1
+    }
+    fname_url_qtr <- paste0("FY",fname_fy,fname_url2[4])
+    fname_url_mth <- case_when(
+      fname_url2[5] == 'March' ~ '03',
+      fname_url2[5] == 'June' ~ '06',
+      fname_url2[5] == 'September' ~ '09',
+      fname_url2[5] == 'December' ~ '12',
+    )
+  } 
+  ## combine name components for clarity
   fname <- paste0("LMR_",fname_url_yr,"_",fname_url_mth,"_",fname_url_qtr,".pdf")
+  
   ## on-going list of reports and urls
   lmr_list <- data.frame(lmr_name=fname, lmr_url=furl_clean)
-  if(exists("input/01_lmr_list.csv")){
+  if(file.exists("input/01_lmr_list.csv")){
     lmr_list_exist <- read_csv("input/01_lmr_list.csv")
     lmr_list_exist <- lmr_list_exist %>% arrange(lmr_name)
   } else {
     lmr_list_exist <- data.frame()
   }
-  
   if(!(fname %in% lmr_list_exist$lmr_name)) {
     lmr_all <- bind_rows(lmr_list_exist, lmr_list)
     write_csv(lmr_list, "input/01_lmr_list.csv")
@@ -168,4 +188,20 @@ fn_tidy_structure <- function(tbl, tbl_metric){
     !!tbl_metric := parse_number(!!sym(tbl_metric))
   )
   tbl_long
+}
+
+## DATA CHECK ####
+fn_data_check <- function(data_check) {
+  fyqtrs <- unique(data_check$fy_qtr)
+  print(fyqtrs)
+  data_smry_cat <- data_check %>% group_by(cat_type, fy_qtr) %>% summarize(
+    netsales=sum(netsales),
+    litres=sum(litres)
+  ) 
+  
+  data_smry_qtr <- data_smry_cat %>% filter(fy_qtr==fyqtrs[1])
+  # format fields for readability
+  data_smry_qtr$litres <- format(data_smry_qtr$litres, big.mark=",", scientific=FALSE, trim=TRUE)
+  data_smry_qtr$netsales <- currency(data_smry_qtr$netsales, symbol="$", digits=0, format='f')
+  print(data_smry_qtr)
 }
