@@ -13,6 +13,13 @@ library(glue)
 library(here)
 library(readr) ## for easy conversion of $ characters to numeric
 
+## 1. MANUAL INPUT: LINK TO PDF ####
+## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
+## find link at: https://www.bcldb.com/publications/liquor-market-review 
+
+furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F16_17_Q1_June_2016.pdf"
+## > rest of process is automated to end
+
 ## PROCESS DESCR. ####
 ## LDB QMR has pages with single table per page
 ## - by category, separate table for net sales $ and litres
@@ -35,12 +42,6 @@ library(readr) ## for easy conversion of $ characters to numeric
 ## PROCESS START ####
 ## GET FUNCTIONS
 source("functions/ldb_extract_functions_v2.R")
-
-## 1. INPUT: LINK TO PDF ####
-## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
-## find link at: https://www.bcldb.com/publications/liquor-market-review 
-## LINK URL - only manual input needed; rest is automated
-furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F22_23_Q4_March_2023_NEW.pdf"
 
 ## 2. IMPORT PDF ####
 ## Function to:
@@ -76,7 +77,9 @@ for(p in 4:length(lmr)){
       cat(p, "tbl pg: processing \n")
       ## > get pg content from PDF ####
       tbl_pg <- lmr[p]
-      tbl_pg_rows <- unlist(strsplit(tbl_pg, "\n"))
+      tbl_pg_rows_init <- unlist(strsplit(tbl_pg, "\n"))
+      ## clean pg -> remove summary & blank rows
+      tbl_pg_rows <- fn_pg_clean(tbl_pg_rows_init)
       
       ## > get meta data ####
       ## table name, category type for processing / saving
@@ -127,63 +130,6 @@ tables_all_fyqtr <- tables_all %>% mutate(
 tbl_save <- here('output',paste0(lmr_name_clean,"_db_upload.csv"))
 write_csv(tables_all_fyqtr, here('output',paste0(lmr_name_clean,"_db_upload.csv")))
 
-###== old process ####
-
-## 5. REDO: UPDATE MySQL ####
-## NEW TABLE AVAILABLE - NEED TO CHANGE BELOW TO ALIGN WITH NEW ARCHITECTURE
-## - once created, ADD to tables info in ldb_extract_functions -> fn_tbls_info
-library(RMariaDB) ## NOTE: pwd blocked out for security -> need to add
-## > connect ####
-## from file in .gitignore
-source('credo.R')
-con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
-#dbGetQuery(con, "SELECT * FROM tblLDB_beer_sales;")
-## > insert ####
-for(i in 1:nrow(tbl_df_t)){
-  ## test for existence of row - insert if not already exist
-  ## may want to change this to delete existing row from latest data set
-  ##. on assumption that newest data is most accurate
-  ## - change this from nrow test to DELETE where condition met
-  if(nrow(dbGetQuery(con, glue("SELECT * FROM {tbl_info$mysql_tbl}
-                       WHERE category='{tbl_df_t$category[i]}' AND
-                       subcategory='{tbl_df_t$subcategory[i]}' AND
-                       qtr='{tbl_df_t$qtr[i]}' AND
-                       fyr='{tbl_df_t$fyr[i]}';")))==0) {
-    ## insert query
-    dbExecute(con, glue("INSERT INTO {tbl_info$mysql_tbl} (
-            category,
-            subcategory,
-            period,
-            netsales,
-            qtr,
-            fyr,
-            cyr,
-            end_dt,
-            end_qtr_dt
-          )
-          VALUES('{tbl_df_t$category[i]}',
-          '{tbl_df_t$subcategory[i]}',
-          '{tbl_df_t$period[i]}',
-          {tbl_df_t$netsales[i]},
-          '{tbl_df_t$qtr[i]}',
-          {tbl_df_t$fyr[i]},
-          {tbl_df_t$cyr[i]},
-          '{tbl_df_t$end_dt[i]}',
-          '{tbl_df_t$end_qtr_dt[i]}'
-          );"))
-  } ## end test IF
-} ## end insert loop
-## END OLD 
-## NEW QUERY ####
-mysql_tbl <- "bcbg.tblLDB_lmr"
-for(r in 1:nrow(tables_all_fyqtr)) {
-  ## delete any existing match
-  dbGetQuery(con, glue("DELETE FROM {mysql_tbl}
-                       WHERE ...."))
-  ## insert row
-  dbGetQuery(con, glue("INSERT "))
-}
-
-## always disconnect when done
-dbDisconnect(con)
-
+## 5. UPDATE MySQL ####
+## currently in lmr_db_upload.R
+## - run separately for quality assurance

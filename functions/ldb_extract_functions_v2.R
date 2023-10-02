@@ -10,7 +10,8 @@ library(readr) ## for easy conversion of $ characters to numeric
 ## get data - download if not already
 fn_lmr <- function(furl){
   ## convert URL to filename in standard format so don't have to specify
-  fname_url <- str_split(furl,"/")
+  furl_clean <- str_replace_all(furl,"%20","_") # replace %20 (if any) with "_" for clean URL
+  fname_url <- str_split(furl_clean,"/")
   fname_url2 <- str_split(fname_url[[1]][5],"_")
   fname_url_qtr <- paste0("FY",fname_url2[[1]][5],fname_url2[[1]][6])
   fname_url_yr <- str_split(fname_url2[[1]][8], "\\.")[[1]][1]
@@ -21,6 +22,19 @@ fn_lmr <- function(furl){
     fname_url2[[1]][7] == 'December' ~ '12',
   )
   fname <- paste0("LMR_",fname_url_yr,"_",fname_url_mth,"_",fname_url_qtr,".pdf")
+  ## on-going list of reports and urls
+  lmr_list <- data.frame(lmr_name=fname, lmr_url=furl_clean)
+  if(exists("input/01_lmr_list.csv")){
+    lmr_list_exist <- read_csv("input/01_lmr_list.csv")
+    lmr_list_exist <- lmr_list_exist %>% arrange(lmr_name)
+  } else {
+    lmr_list_exist <- data.frame()
+  }
+  
+  if(!(fname %in% lmr_list_exist$lmr_name)) {
+    lmr_all <- bind_rows(lmr_list_exist, lmr_list)
+    write_csv(lmr_list, "input/01_lmr_list.csv")
+  }
   pdf_file <- paste0("input/",fname)
   ## if file doesn't exist download it, otherwise import
   if(!file.exists(pdf_file)){
@@ -30,6 +44,22 @@ fn_lmr <- function(furl){
     lmr <- pdf_text(pdf_file)
   }
   return(list(lmr, fname))
+}
+
+## clean pg -> remove summary, blank rows
+fn_pg_clean <- function(tbl_pg_rows) {
+  ## > RM SUMMARY ROWS (or blank) ####
+  cat("clean tbl: remove summary, blank rows \n")
+  srows <- NULL
+  for(r in 1:length(tbl_pg_rows)){
+    if(str_detect(tbl_pg_rows[r],"Summary")==TRUE | tbl_pg_rows[r]==""){
+      srow <- r
+      srows <- c(srows,srow)
+    }
+  }
+  ## want to remove Summary OR blank rows
+  tbl_pg_rows_ns <- tbl_pg_rows[c(-srows)]
+  return(tbl_pg_rows_ns)
 }
 
 ## get meta data from pg
@@ -49,12 +79,12 @@ fn_pg_meta <- function(tbl_pg_rows, pg_num, tbl_name_prev, tbl_cat_type){
       tbl_cat_type <- tbl_cat_type
       hrow <- 2
     } else { ## 
-      tbl_cat_type <- tbl_pg_rows[3]
-      hrow <- 4
+      tbl_cat_type <- tbl_pg_rows[2]
+      hrow <- 3
     }
   } else {
-    tbl_cat_type <- tbl_pg_rows[3]
-    hrow <- 4
+    tbl_cat_type <- tbl_pg_rows[2]
+    hrow <- 3
   }
   ## get table metric
   tbl_metric <- unlist(str_split(tbl_pg_rows[hrow], "\\s{2,}"))[2]
@@ -72,23 +102,13 @@ fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
   cat("start content process function \n")
   ## unpack meta data
   tbl_name <- tbl_meta[[1]]
-  hrow <- tbl_meta[[2]] ## identifies heading row, depends on pg layout
+  hrow <- tbl_meta[[2]] ## identifies heading row, depends on pg layout; -1 for blank row
   tbl_cat_type <- tbl_meta[[3]]
   tbl_metric <- tbl_meta[[4]]
-  ## > RM SUMMARY ROWS ####
-  cat("remove summary rows \n")
-  srows <- NULL
-  for(r in 1:length(tbl_pg_rows)){
-    if(str_detect(tbl_pg_rows[r],"Summary")==TRUE){
-      srow <- r
-      srows <- c(srows,srow)
-    }
-  }
-  tbl_pg_rows_ns <- tbl_pg_rows[c(-srows)]
   
   ## > TABLE + HEADING ####
   cat("get headings, set up table \n")
-  tbl_heading <- unlist(str_split(tbl_pg_rows_ns[hrow], "\\s{2,}"))[c(-1,-2)] # drop first two: empty, metric name
+  tbl_heading <- unlist(str_split(tbl_pg_rows[hrow], "\\s{2,}"))[c(-1,-2)] # drop first two: empty, metric name
   first_cols <- c("cat_type","category","subcategory")
   tbl_heading <- c(first_cols, tbl_heading)
   ## initiate empty table with proper headings
@@ -100,10 +120,10 @@ fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
   cat("process data \n")
   start <- hrow+1
   ## loop through each row to collect data
-  for(r in start:length(tbl_pg_rows_ns)){
+  for(r in start:length(tbl_pg_rows)){
     ## pre-defined tbl will accumulate rows through loop
-    cat("table row: ", r, "\n")
-    row_content <- unlist(str_split(trimws(tbl_pg_rows_ns[r]), "\\s{2,}"))
+    cat("table row: ", r, "; ")
+    row_content <- unlist(str_split(trimws(tbl_pg_rows[r]), "\\s{2,}"))
     col_nums <- length(row_content)
     cat("col nums:", col_nums, "\n")
     if(col_nums>5){ ## only rows with data
@@ -120,6 +140,7 @@ fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
         tbl[tr,c(4:(col_nums+2))] <- row_content[c(2:col_nums)]
       }
     } ## end row conditional
+    print(tbl)
   } ## end single page loop
   
   ## TIDY FORMAT ####
