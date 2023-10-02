@@ -30,7 +30,7 @@ fn_db_upload <- function(mysql_tbl, tbl_upload) {
       ## delete any existing match
       dbGetQuery(con, glue("DELETE FROM {mysql_tbl}
                            WHERE fy_qtr='{tbl_upload$fy_qtr[r]}' AND
-                           cat_type='{tbl_upload$cat_type[r]}'
+                           cat_type='{tbl_upload$cat_type[r]}' AND
                            category='{tbl_upload$category[r]}' AND
                            subcategory='{tbl_upload$subcategory[r]}';"))
       ## insert row from new data
@@ -50,6 +50,6 @@ fn_db_upload <- function(mysql_tbl, tbl_upload) {
               {tbl_upload$netsales[r]}
               );"))
     }
+    ## always disconnect when done
+    dbDisconnect(con)
 }
-## always disconnect when done
-dbDisconnect(con)

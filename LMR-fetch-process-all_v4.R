@@ -16,8 +16,9 @@ library(readr) ## for easy conversion of $ characters to numeric
 ## 1. MANUAL INPUT: LINK TO PDF ####
 ## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
 ## find link at: https://www.bcldb.com/publications/liquor-market-review 
+## older reports: https://www.bcldb.com/publications/archives?y%5Bvalue%5D%5Byear%5D=&r=4&b= 
 
-furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F16_17_Q1_June_2016.pdf"
+furl <- "https://www.bcldb.com/files/Liquor%20Market%20Review_F16_17_Q2_September_2016.pdf"
 ## > rest of process is automated to end
 
 ## PROCESS DESCR. ####
