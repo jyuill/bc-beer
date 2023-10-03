@@ -1,0 +1,52 @@
+---
+title: "LMR Explore - All"
+format: html
+editor: visual
+---
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+library(tidyverse)
+library(lubridate)
+library(scales)
+library(glue)
+library(readr) ## for easy conversion of $ characters to numeric
+library(RMariaDB) ## best way to access MySQL from R
+theme_set(theme_bw())
+
+```
+
+```{r}
+#| echo: FALSE
+source('credo.R')
+con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
+
+lmr_data <- dbGetQuery(con, "SELECT * FROM tblLDB_lmr lmr
+                       LEFT JOIN tblLDB_quarter qtr ON lmr.fy_qtr=qtr.fy_qtr;")
+
+dbDisconnect(con)
+```
+
+## BC LDB Liquor Market Review Data
+
+BC Liquor Distribution Board releases its 'Liquor Market Review' of market statistics on a quarterly basis. The reports are made available to the public through [BC LDB website](https://www.bcldb.com/publications/liquor-market-review).
+
+Data compiled here goes back to June 2015.
+
+## TREND OVERVIEW
+
+Overview of trends by major category.
+
+```{r}
+#| echo: FALSE
+#| warning: FALSE
+#| message: FALSE
+trend <- lmr_data %>% group_by(cat_type, fy_qtr, end_qtr_dt) %>% 
+  summarize(netsales=sum(netsales),
+            litres=sum(litres)) %>% filter(end_qtr_dt>'2020-12-31')
+
+trend %>% ggplot(aes(x=end_qtr_dt, y=as.numeric(netsales), color=cat_type))+geom_line(stat='identity')+
+  scale_x_date(date_breaks="3 months", date_labels="%b %Y")
+
+```
