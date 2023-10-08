@@ -8,7 +8,7 @@ con_a <- dbConnect(RMariaDB::MariaDB(),
                    password=apwd,
                    port=aport)
 
-dbGetQuery(con_a, "SELECT * FROM bcbg.tblLDB_lmr;")
+lmr_aws <- dbGetQuery(con_a, "SELECT * FROM bcbg.tblLDB_lmr;")
 
 dbDisconnect(con)
 

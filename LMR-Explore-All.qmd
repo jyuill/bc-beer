@@ -13,19 +13,36 @@ library(scales)
 library(glue)
 library(readr) ## for easy conversion of $ characters to numeric
 library(RMariaDB) ## best way to access MySQL from R
-theme_set(theme_bw())
+theme_set(theme_light())
 
 ```
 
 ```{r}
 #| echo: FALSE
 source('credo.R')
-con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
+# local server
+#con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
+# aws
+con_aws <- dbConnect(RMariaDB::MariaDB(),
+                   host=endpt,
+                   user='admin',
+                   password=apwd,
+                   port=aport)
+lmr_data <- dbGetQuery(con_aws, "SELECT * FROM bcbg.tblLDB_lmr lmr
+                       LEFT JOIN bcbg.tblLDB_quarter qtr ON lmr.fy_qtr=qtr.fy_qtr;")
 
-lmr_data <- dbGetQuery(con, "SELECT * FROM tblLDB_lmr lmr
-                       LEFT JOIN tblLDB_quarter qtr ON lmr.fy_qtr=qtr.fy_qtr;")
+dbDisconnect(con_aws)
+```
 
-dbDisconnect(con)
+```{r}
+#! clean
+lmr_data <- lmr_data %>% select(-fy_qtr..8)
+lmr_data <- lmr_data %>% mutate(
+  cat_type = ifelse(cat_type=='Refreshment Beverages','Refresh Bev',cat_type)
+)
+lmr_data <- lmr_data %>% mutate(
+  start_qtr_dt =floor_date(end_qtr_dt, unit="months")
+)
 ```
 
 ## BC LDB Liquor Market Review Data
@@ -42,11 +59,22 @@ Overview of trends by major category.
 #| echo: FALSE
 #| warning: FALSE
 #| message: FALSE
-trend <- lmr_data %>% group_by(cat_type, fy_qtr, end_qtr_dt) %>% 
+trend <- lmr_data %>% group_by(cat_type, fy_qtr, start_qtr_dt) %>% 
   summarize(netsales=sum(netsales),
-            litres=sum(litres)) %>% filter(end_qtr_dt>'2020-12-31')
+            litres=sum(litres)) %>% filter(start_qtr_dt>'2017-04-01')
 
-trend %>% ggplot(aes(x=end_qtr_dt, y=as.numeric(netsales), color=cat_type))+geom_line(stat='identity')+
-  scale_x_date(date_breaks="3 months", date_labels="%b %Y")
+trend %>% ggplot(aes(x=start_qtr_dt, y=as.numeric(netsales), color=cat_type))+geom_line(stat='identity')+
+  scale_x_date(breaks=trend$start_qtr_dt, date_labels="%b %Y")+
+  scale_y_continuous(labels=comma)+
+  labs(title="Net Sales $ Trends by Category",y="",x="")+
+  theme_classic()+
+  theme(axis.text.x=element_text(angle=90))
+  
+
+```
+
+Let's look at breakdown in share
+
+```{r}
 
 ```
