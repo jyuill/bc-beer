@@ -12,3 +12,4 @@ dbListTables(con_g)
 dbGetQuery(con_g, "SELECT * FROM tblLDB_beer_sales;")
 
 dbDisconnect(con_g)
+
