@@ -21,8 +21,17 @@ source('credo.R')
 #fn_db_upload(mysql_tbl, tbl_upload)
 
 ## CHECK QTRS
+## will add latest quarter if not present
 fn_db_qtrs <- function(tbl_upload) {
-  con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
+  #local mysql
+  #con <- dbConnect(RMariaDB::MariaDB(), user=l.user, password=l.mypwd, dbname='bcbg')
+  # amazon mysql
+  con <- dbConnect(RMariaDB::MariaDB(),
+                     host=a.endpt,
+                     user=a.user,
+                     password=a.pwd,
+                     port=a.port)
+  
   qtrs <- dbGetQuery(con, "SELECT * FROM tblLDB_quarter;")
   
   if(max(qtrs$fy_qtr)<max(tbl_upload$fy_qtr)) {
@@ -73,7 +82,14 @@ fn_db_qtrs <- function(tbl_upload) {
 ## set up as function for flexbility later - may want to call from other files/processes
 fn_db_upload <- function(mysql_tbl, tbl_upload) {
     # connection needed for upload
-    con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
+    #local mysql
+    #con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
+    # amazon mysql
+    con <- dbConnect(RMariaDB::MariaDB(),
+                     host=a.endpt,
+                     user=a.user,
+                     password=a.pwd,
+                     port=a.port)
     # test
     #dbGetQuery(con, "SELECT * FROM tblLDB_lmr;")
     
@@ -107,8 +123,14 @@ fn_db_upload <- function(mysql_tbl, tbl_upload) {
 
 ## DATA CHECK ####
 fn_db_check <- function(data_check) {
-    # connection needed for upload
-  con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
+  #local mysql
+  #con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
+  # amazon mysql
+  con <- dbConnect(RMariaDB::MariaDB(),
+                   host=a.endpt,
+                   user=a.user,
+                   password=a.pwd,
+                   port=a.port)
   # query
   data_db <- dbGetQuery(con, "SELECT * FROM bcbg.tblLDB_lmr;")
   ## always disconnect when done
@@ -123,5 +145,6 @@ fn_db_check <- function(data_check) {
   # format fields for readability
   data_smry_qtr_db$litres <- format(as.numeric(data_smry_qtr_db$litres), big.mark=",", scientific=FALSE, trim=TRUE)
   data_smry_qtr_db$netsales <- currency(as.numeric(data_smry_qtr_db$netsales), symbol="$", digits=0, format='f')
+  # print data to compare against online report
   print(data_smry_qtr_db)
 }

@@ -139,5 +139,5 @@ data_check <- tables_all_fyqtr
 fn_data_check(data_check)
 
 ## 5. UPDATE MySQL ####
-## currently in lmr_db_upload.R
+## currently in LMR_db_upload.R
 ## - run separately for quality assurance
