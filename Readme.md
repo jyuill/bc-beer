@@ -1,8 +1,8 @@
 ## BC LDB LMR: download, process, upload
 
 Main purpose of this repo is to facilitate the collection of data from
-the quarterly (BC LDB Liquor Market
-Review)\[<https://www.bcldb.com/publications/liquor-market-review>\] for
+the quarterly [BC LDB Liquor Market
+Review](https://www.bcldb.com/publications/liquor-market-review) for
 reporting and analysis.
 
 ## Components
@@ -24,3 +24,9 @@ When new LMR is released on the BC LDB website:
 2.  Run LMR-fetch-process-all_v4.R
 3.  Run LMR_db_upload.R to add to MySQL database.
 4.  Refresh/update any reporting and/or analysis.
+
+## Reporting / Analysis
+
+Data is reported and analyzed via separate repo(s). For example,
+exploration done in [lmr-explore
+repo](https://github.com/jyuill/lmr-explore).
