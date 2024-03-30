@@ -19,7 +19,7 @@ rm(list=ls())
 ## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
 ## find link at: https://www.bcldb.com/publications/liquor-market-review 
 ## older reports: https://www.bcldb.com/publications/archives?y%5Bvalue%5D%5Byear%5D=&r=4&b= 
-furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F23_24_Q1_June_2023.pdf"
+furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F23_24_Q2_September_2023.pdf"
 ## > rest of process is automated to end > run via 'Source'
 
 ## Load functions ####

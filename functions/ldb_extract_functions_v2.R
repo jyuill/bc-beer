@@ -53,12 +53,12 @@ fn_lmr <- function(furl){
   }
   if(!(fname %in% lmr_list_exist$lmr_name)) {
     lmr_all <- bind_rows(lmr_list_exist, lmr_list)
-    write_csv(lmr_list, "input/01_lmr_list.csv")
+    write_csv(lmr_all, "input/01_lmr_list.csv")
   }
   pdf_file <- paste0("input/",fname)
   ## if file doesn't exist download it, otherwise import
   if(!file.exists(pdf_file)){
-    download.file(furl, pdf_file, mode='wd')
+    download.file(furl, pdf_file, mode='wb') # mode='wb' on windows for text files
     lmr <- pdf_text(pdf_file)
   } else {
     lmr <- pdf_text(pdf_file)
@@ -164,8 +164,10 @@ fn_tbl_content <- function(tbl_pg_rows, tbl_meta){
   } ## end single page loop
   
   ## TIDY FORMAT ####
-  if(rowSums(is.na(tbl))<2){
-  tbl_long <- fn_tidy_structure(tbl, tbl_metric)
+  # check for NA within each tbl row? 
+  # not sure what this does so setting it to max NAs per row less than 2
+  if(max(rowSums(is.na(tbl)))<2){
+    tbl_long <- fn_tidy_structure(tbl, tbl_metric)
   } else {
     tbl_long <- NULL
   }
@@ -198,10 +200,18 @@ fn_data_check <- function(data_check) {
     netsales=sum(netsales),
     litres=sum(litres)
   ) 
+  # chart for each category, each qtr
+  data_chart <- data_smry_cat %>% ggplot(aes(x=fy_qtr, y=netsales))+geom_col()+
+    facet_grid(.~cat_type)+
+    scale_y_continuous(labels=comma_format())+
+    theme(axis.text.x = element_text(angle=45, hjust=1),
+          axis.ticks.x = element_blank())+
+          labs(x="")
+  print(data_chart)
   
   data_smry_qtr <- data_smry_cat %>% filter(fy_qtr==fyqtrs[1])
   # format fields for readability
-  data_smry_qtr$litres <- format(data_smry_qtr$litres, big.mark=",", scientific=FALSE, trim=TRUE)
-  data_smry_qtr$netsales <- currency(data_smry_qtr$netsales, symbol="$", digits=0, format='f')
+  data_smry_qtr$litres <- format(data_smry_qtr$litres, big.mark=",", scientific=FALSE, trim=TRUE, justify=c("right"))
+  data_smry_qtr$netsales <- format(data_smry_qtr$netsales, big.mark=",", scientific=FALSE, format='i', justify=c("right"))
   print(data_smry_qtr)
 }
