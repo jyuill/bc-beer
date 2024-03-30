@@ -21,7 +21,7 @@ source('credo.R')
 #fn_db_upload(mysql_tbl, tbl_upload)
 
 ## CHECK QTRS
-## will add latest quarter if not present
+## will add latest quarter if not already present
 fn_db_qtrs <- function(tbl_upload) {
   #local mysql
   #con <- dbConnect(RMariaDB::MariaDB(), user=l.user, password=l.mypwd, dbname='bcbg')
