@@ -27,11 +27,13 @@ fn_db_qtrs <- function(tbl_upload) {
   #con <- dbConnect(RMariaDB::MariaDB(), user=l.user, password=l.mypwd, dbname='bcbg')
   # amazon mysql
   con <- dbConnect(RMariaDB::MariaDB(),
+                     dbname="bcbg",
                      host=a.endpt,
                      user=a.user,
                      password=a.pwd,
                      port=a.port)
-  
+  #dbListTables(con) # check connection
+  # get list of quarters covered
   qtrs <- dbGetQuery(con, "SELECT * FROM tblLDB_quarter;")
   
   if(max(qtrs$fy_qtr)<max(tbl_upload$fy_qtr)) {
