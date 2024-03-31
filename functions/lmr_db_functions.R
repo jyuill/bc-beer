@@ -12,7 +12,7 @@ library(RMariaDB) ## for MySQL
 ## credentials ####
 ## from file in .gitignore
 source('credo.R')
-
+database_name <- "bcbg"
 ## TEST parameters for function
 #mysql_tbl <- "bcbg.tblLDB_lmr"
 #tbl_upload <- tables_all_fyqtr ## table produced frm LMR-fetch-process-all_vX.R
@@ -25,14 +25,14 @@ source('credo.R')
 fn_db_qtrs <- function(tbl_upload) {
   #local mysql
   #con <- dbConnect(RMariaDB::MariaDB(), user=l.user, password=l.mypwd, dbname='bcbg')
-  # amazon mysql
+  # amazon RDS mysql
   con <- dbConnect(RMariaDB::MariaDB(),
-                     dbname="bcbg",
+                     dbname=database_name,
                      host=a.endpt,
                      user=a.user,
                      password=a.pwd,
                      port=a.port)
-  #dbListTables(con) # check connection
+  #dbListTables(con) # check connection by getting list of tables
   # get list of quarters covered
   qtrs <- dbGetQuery(con, "SELECT * FROM tblLDB_quarter;")
   
@@ -88,6 +88,7 @@ fn_db_upload <- function(mysql_tbl, tbl_upload) {
     #con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
     # amazon mysql
     con <- dbConnect(RMariaDB::MariaDB(),
+                     dbname=database_name,
                      host=a.endpt,
                      user=a.user,
                      password=a.pwd,
@@ -118,6 +119,10 @@ fn_db_upload <- function(mysql_tbl, tbl_upload) {
               {tbl_upload$litres[r]},
               {tbl_upload$netsales[r]}
               );"))
+      cat("Inserted: ", r, tbl_upload$fy_qtr[r], 
+          tbl_upload$cat_type[r],
+          tbl_upload$category[r],
+          tbl_upload$subcategory[r],"\n")
     }
     ## always disconnect when done
     dbDisconnect(con)
@@ -129,6 +134,7 @@ fn_db_check <- function(data_check) {
   #con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
   # amazon mysql
   con <- dbConnect(RMariaDB::MariaDB(),
+                   dbname=database_name,
                    host=a.endpt,
                    user=a.user,
                    password=a.pwd,
