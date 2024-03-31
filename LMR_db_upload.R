@@ -12,6 +12,7 @@ source('functions/lmr_db_functions.R')
 
 ## SET parameters for function
 mysql_tbl <- "bcbg.tblLDB_lmr"
+
 ## GET file to upload
 # if table available produced frm LMR-fetch-process-all_vX.R
 if(exists('tables_all_fyqtr')){
@@ -19,7 +20,7 @@ if(exists('tables_all_fyqtr')){
 } else if(exists('tbl_upload')) {
   tbl_upload <- tbl_upload
 } else {
-  # alternately, import from saved -> CHANGE to match latest
+  # ALTERNATELY, import from saved -> CHANGE to match latest
   #tbl_upload <- read_csv('output/LMR_2023_09_FY24Q2_db_upload.csv')
   f_path <- file.choose()
   tbl_upload <- read_csv(f_path)
@@ -32,4 +33,4 @@ fn_db_qtrs(tbl_upload)
 fn_db_upload(mysql_tbl, tbl_upload)
 
 ## CHECK: spot-check data by category
-fn_db_check(tbl_upload)
+fn_db_check()

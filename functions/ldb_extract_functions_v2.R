@@ -193,13 +193,14 @@ fn_tidy_structure <- function(tbl, tbl_metric){
 }
 
 ## DATA CHECK ####
+# compare data processed to LMR report before uploading
 fn_data_check <- function(data_check) {
   fyqtrs <- unique(data_check$fy_qtr)
   print(fyqtrs)
-  data_smry_cat <- data_check %>% group_by(cat_type, fy_qtr) %>% summarize(
-    netsales=sum(netsales),
-    litres=sum(litres)
-  ) 
+  data_smry_cat <- data_check %>% group_by(cat_type, fy_qtr) %>% 
+    summarize(netsales=sum(netsales),
+              litres=sum(litres)
+    ) 
   # chart for each category, each qtr
   data_chart <- data_smry_cat %>% ggplot(aes(x=fy_qtr, y=netsales))+geom_col()+
     facet_grid(.~cat_type)+
@@ -208,10 +209,10 @@ fn_data_check <- function(data_check) {
           axis.ticks.x = element_blank())+
           labs(x="")
   print(data_chart)
-  
-  data_smry_qtr <- data_smry_cat %>% filter(fy_qtr==fyqtrs[1])
+  # summary data by category for most recent quarter
+  data_smry_qtr <- data_smry_cat %>% filter(fy_qtr==max(fyqtrs))
   # format fields for readability
   data_smry_qtr$litres <- format(data_smry_qtr$litres, big.mark=",", scientific=FALSE, trim=TRUE, justify=c("right"))
-  data_smry_qtr$netsales <- format(data_smry_qtr$netsales, big.mark=",", scientific=FALSE, format='i', justify=c("right"))
+  data_smry_qtr$netsales <- format(data_smry_qtr$netsales, big.mark=",", scientific=FALSE, trim=TRUE, format='i', justify=c("right"))
   print(data_smry_qtr)
 }

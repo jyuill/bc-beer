@@ -129,7 +129,7 @@ fn_db_upload <- function(mysql_tbl, tbl_upload) {
 }
 
 ## DATA CHECK ####
-fn_db_check <- function(data_check) {
+fn_db_check <- function() {
   #local mysql
   #con <- dbConnect(RMariaDB::MariaDB(), user='root', password=mypwd, dbname='bcbg')
   # amazon mysql
@@ -144,15 +144,26 @@ fn_db_check <- function(data_check) {
   ## always disconnect when done
   dbDisconnect(con)
   
-  data_smry_qtr_db <- data_db %>% group_by(cat_type, fy_qtr) %>% summarize(
-    netsales=sum(netsales),
-    litres=sum(litres)
-  ) 
-  fyqtrs <- unique(data_check$fy_qtr)
-  data_smry_qtr_db <- data_smry_qtr_db %>% filter(fy_qtr==fyqtrs[1])
+  data_smry_qtr_db <- data_db %>% group_by(cat_type, fy_qtr) %>% 
+    summarize(
+      netsales=sum(netsales),
+      litres=sum(litres)
+    ) 
+  fyqtrs <- unique(data_smry_qtr_db$fy_qtr)
+  # summary data by category for most recent quarter
+  data_smry_qtr_db <- data_smry_qtr_db %>% filter(fy_qtr==max(fyqtrs))
+  # chart for each category, each qtr
+  data_chart <- data_smry_qtr_db %>% ggplot(aes(x=cat_type, y=netsales))+
+    geom_col(position = position_dodge())+
+    scale_y_continuous(labels=comma_format())+
+    theme(axis.ticks.x = element_blank())+
+    labs(x="", title=max(fyqtrs))
+  print(data_chart)
+  
   # format fields for readability
-  data_smry_qtr_db$litres <- format(as.numeric(data_smry_qtr_db$litres), big.mark=",", scientific=FALSE, trim=TRUE)
-  data_smry_qtr_db$netsales <- currency(as.numeric(data_smry_qtr_db$netsales), symbol="$", digits=0, format='f')
-  # print data to compare against online report
+  data_smry_qtr_db$netsales <- as.numeric(data_smry_qtr_db$netsales)
+  data_smry_qtr_db$litres <- as.numeric(data_smry_qtr_db$litres)
+  data_smry_qtr_db$litres <- format(data_smry_qtr_db$litres, big.mark=",", scientific=FALSE)
+  data_smry_qtr_db$netsales <- format(data_smry_qtr_db$netsales, big.mark=",", scientific=FALSE)
   print(data_smry_qtr_db)
 }

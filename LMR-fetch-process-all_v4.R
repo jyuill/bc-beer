@@ -19,7 +19,7 @@ rm(list=ls())
 ## SPECIFY LINK AND DESIRED FILE NAME: needed for each issue
 ## find link at: https://www.bcldb.com/publications/liquor-market-review 
 ## older reports: https://www.bcldb.com/publications/archives?y%5Bvalue%5D%5Byear%5D=&r=4&b= 
-furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F23_24_Q2_September_2023.pdf"
+furl <- "https://www.bcldb.com/files/Liquor_Market_Review_F23_24_Q3_December_2023.pdf"
 ## > rest of process is automated to end > run via 'Source'
 
 ## Load functions ####
@@ -135,8 +135,7 @@ write_csv(tables_all_fyqtr, here('output',paste0(lmr_name_clean,"_db_upload.csv"
 
 ## > data check ####
 # quick check by category
-data_check <- tables_all_fyqtr
-fn_data_check(data_check)
+fn_data_check(tables_all_fyqtr)
 
 ## 5. UPDATE MySQL ####
 ## currently in LMR_db_upload.R

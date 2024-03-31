@@ -10,8 +10,7 @@ library(formattable)
 ## CHECK DATA: TABLE COMPILED FROM PDF ####
 # ALSO AT END OF fetch-process
 ## assumes data available in final table for each report
-data_check <- tables_all_fyqtr
-fn_data_check(data_check)
+fn_data_check(tables_all_fyqtr)
 
 ## CHECK DATA: MYSQL ####
 # ALSO AT END OF DB UPLOAD
