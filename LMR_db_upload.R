@@ -14,7 +14,7 @@ source('functions/lmr_db_functions.R')
 mysql_tbl <- "bcbg.tblLDB_lmr"
 
 ## GET file to upload
-# if table available produced frm LMR-fetch-process-all_vX.R
+# if table available produced frm LMR-fetch-process-all_vX.R in current/recent session
 if(exists('tables_all_fyqtr')){
   tbl_upload <- tables_all_fyqtr 
 } else if(exists('tbl_upload')) {
